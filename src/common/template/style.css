@@ -1,0 +1,11 @@
+App {
+    font: 'Arial'
+}
+
+.mdi-icon {
+    font-family: 'Material Icons'
+}
+
+.mdi-menu {
+    content: "&#xE87C";
+}
