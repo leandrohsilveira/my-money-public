@@ -7,8 +7,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {cyan800} from 'material-ui/styles/colors';
 
-import Header from './header.dumb'
-import Sidebar from './sidebar.dumb'
+import Header from './header.component'
+import Sidebar from './sidebar.component'
 
 import {onSideBarToggle} from './layout.actions'
 

@@ -6,8 +6,9 @@ import MenuItem from 'material-ui/MenuItem';
 import AppBar from 'material-ui/AppBar'
 import FontIcon from 'material-ui/FontIcon'
 import Divider from 'material-ui/Divider'
+import Subheader from 'material-ui/Subheader'
 
-import NavMenuItem from '../common/template/nav-menu-item.component'
+import NavMenuItem from '../template/nav-menu-item.component'
 
 export default props => {
     const appIconStyle = {
@@ -23,7 +24,8 @@ export default props => {
             <AppBar title="My Money" iconElementLeft={appIcon}></AppBar>
             <NavMenuItem href="#/dashboard" onClick={props.onChange} iconClass="mi mi-home" value="Dashboard"></NavMenuItem>
             <Divider></Divider>
-            <MenuItem>Menu Item 2</MenuItem>
+            <Subheader>Registry</Subheader>
+            <NavMenuItem href="#/billing-cycles/new" onClick={props.onChange} iconClass="mi mi-library-add" value="Billing cycles"></NavMenuItem>
         </Drawer>
     )
 }
