@@ -7,6 +7,8 @@ import AppBar from 'material-ui/AppBar'
 import FontIcon from 'material-ui/FontIcon'
 import Divider from 'material-ui/Divider'
 
+import NavMenuItem from '../common/template/nav-menu-item.component'
+
 export default props => {
     const appIconStyle = {
         marginTop: 5,
@@ -19,7 +21,7 @@ export default props => {
     return (
         <Drawer open={props.open} onRequestChange={props.onChange} docked={props.docked}>
             <AppBar title="My Money" iconElementLeft={appIcon}></AppBar>
-            <MenuItem leftIcon={<FontIcon className="mi mi-home"></FontIcon>} primaryText="Dashboard"></MenuItem>
+            <NavMenuItem href="#/dashboard" onClick={props.onChange} iconClass="mi mi-home" value="Dashboard"></NavMenuItem>
             <Divider></Divider>
             <MenuItem>Menu Item 2</MenuItem>
         </Drawer>

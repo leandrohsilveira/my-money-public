@@ -10,3 +10,10 @@ body {
     font-family: 'Material Icons';
     content: "\e263";
 }
+
+a.nav-menu-item,
+a.nav-menu-item:active,
+a.nav-menu-item:hover,
+a.nav-menu-item:visited {
+    text-decoration: none;
+}
