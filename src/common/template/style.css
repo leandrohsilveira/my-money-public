@@ -1,11 +1,12 @@
-App {
-    font: 'Arial'
+body {
+    margin: 0;
 }
 
-.mdi-icon {
-    font-family: 'Material Icons'
+.sidebar {
+    float: left;
 }
 
-.mdi-menu {
-    content: "&#xE87C";
+.sidebar-header {
+    font-family: 'Material Icons';
+    content: "\e263";
 }

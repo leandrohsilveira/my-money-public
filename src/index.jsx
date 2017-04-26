@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import App from './app/app.component'
+import App from './app/app.container'
 
 import './common/template/dependencies'
 
