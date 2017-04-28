@@ -2,43 +2,24 @@ import React, { Component } from 'react'
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import axios from 'axios'
 
 import Snackbar from 'material-ui/Snackbar'
 
-import {api} from '../configs'
 import {changeTitle} from '../layout/layout.actions'
+import {onSummaryLoad} from './dashboard.actions'
+
 import Summary from '../widgets/summary.component'
 import ErrorMessage from '../widgets/error-message.component'
 
 class Dashboard extends Component {
 
-
     constructor(props) {
         super(props)
-
-        this.state = {
-            credit: 0,
-            debt: 0,
-            errorResp: null
-        }
-
-        this.loadSummary = this.loadSummary.bind(this)
     }
 
     componentWillMount() {
         this.props.changeTitle("Dashboard")
-        this.loadSummary()
-    }
-
-    loadSummary() {
-        axios.get(api('billing-cycles/summary'))
-                .then(resp => {
-                    this.setState({...resp.data, errorResp: null})
-                })
-                .catch(resp => {
-                    this.setState({errorResp: resp})
-                })
+        this.props.onSummaryLoad()
     }
 
     processResponseError(resp) {
@@ -50,14 +31,14 @@ class Dashboard extends Component {
     render() {
         return (
             <div>
-                <Summary currency="R$" credits={this.state.credit} debts={this.state.debt}></Summary>
-                <ErrorMessage resp={this.state.errorResp} processResponseError={this.processResponseError} action="Retry" onAction={this.loadSummary}/>
+                <Summary currency="R$" credits={this.props.summary.credit} debts={this.props.summary.debt}></Summary>
+                <ErrorMessage resp={this.props.errorResp} processResponseError={this.processResponseError} action="Retry" onRequestClose={this.props.onSummaryLoad} onAction={this.props.onSummaryLoad}/>
             </div>
         )
     }
 }
 
-const mapStateToProps = state => ({})
-const mapDispatchToProps = dispatch => bindActionCreators({changeTitle}, dispatch)
+const mapStateToProps = state => ({summary: state.dashboard.summary, errorResp: state.dashboard.errorResp})
+const mapDispatchToProps = dispatch => bindActionCreators({changeTitle, onSummaryLoad}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
