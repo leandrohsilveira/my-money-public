@@ -24,7 +24,9 @@ const Layout = props => {
             <div>
                 <Header title={props.title} onSidebarOpen={props.onSideBarToggle}></Header>
                 <Sidebar open={props.sideBarOpen} onChange={props.onSideBarToggle} docked={false}></Sidebar>
-                {props.children}
+                <div className="content">
+                    {props.children}
+                </div>
             </div>
         </MuiThemeProvider>
     )

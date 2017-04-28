@@ -1,7 +1,7 @@
 import {LAYOUT} from './layout.actions'
 
 const INITIAL_STATE = {
-    title: 'Home',
+    title: 'Dashboard',
     sideBarOpen: false
 }
 

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 import App from './app/app.container'
 
-import './common/template/dependencies'
+import './app/dependencies'
 
 const render = (
     <App></App>

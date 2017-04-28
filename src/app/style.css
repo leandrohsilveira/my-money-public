@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+}
+
+@media screen and (max-width: 767px) {
+    .content {
+        padding: 10px 30px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .content {
+        padding: 15px 80px;
+    }
+}
+
+a.nav-menu-item,
+a.nav-menu-item:active,
+a.nav-menu-item:hover,
+a.nav-menu-item:visited {
+    text-decoration: none;
+}

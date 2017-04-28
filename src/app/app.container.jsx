@@ -11,6 +11,9 @@ import thunk from 'redux-thunk'
 import appReducer from './app.reducer'
 import Layout from './layout/layout.container'
 
+import {HashRouter} from 'react-router-dom'
+import AppRoutes from './app.routes'
+
 export default props => {
 
     injectTapEventPlugin();
@@ -20,6 +23,9 @@ export default props => {
     return (
         <Provider store={store}>
             <Layout>
+                <HashRouter>
+                    <AppRoutes />
+                </HashRouter>
             </Layout>
         </Provider>
     )
