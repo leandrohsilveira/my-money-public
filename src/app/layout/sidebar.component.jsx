@@ -25,7 +25,7 @@ export default props => {
             <NavMenuItem href="/dashboard" onClick={props.onChange} iconClass="mi mi-home" value="Dashboard"></NavMenuItem>
             <Divider></Divider>
             <Subheader>Registry</Subheader>
-            <NavMenuItem href="/billing-cycles/new" onClick={props.onChange} iconClass="mi mi-library-add" value="Billing cycles"></NavMenuItem>
+            <NavMenuItem href="/billing-cycles" onClick={props.onChange} iconClass="mi mi-library-add" value="Billing cycles"></NavMenuItem>
         </Drawer>
     )
 }

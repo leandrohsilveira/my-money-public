@@ -5,6 +5,8 @@ import {connect} from 'react-redux'
 
 import {changeTitle} from '../layout/layout.actions'
 
+import BillingCycleTabs from './billing-cycle-tabs.component'
+
 
 class BillingCycle extends Component {
     
@@ -18,7 +20,7 @@ class BillingCycle extends Component {
 
     render() {
         return (
-            <div>Billing Cycle Content</div>
+            <BillingCycleTabs />
         )
     }
 }

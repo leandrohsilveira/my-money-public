@@ -30,7 +30,7 @@ class Dashboard extends Component {
 
     render() {
         return (
-            <div>
+            <div className="content">
                 <Summary currency="R$" credits={this.props.summary.credit} debts={this.props.summary.debt}></Summary>
                 <ErrorMessage resp={this.props.errorResp} processResponseError={this.processResponseError} action="Retry" onRequestClose={this.props.onSummaryLoad} onAction={this.props.onSummaryLoad}/>
             </div>
