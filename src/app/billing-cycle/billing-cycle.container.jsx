@@ -6,7 +6,8 @@ import {connect} from 'react-redux'
 import {changeTitle} from '../layout/layout.actions'
 import {onBillingCycleFetch} from './billing-cycle.actions'
 
-import BillingCycleTabs from './billing-cycle-tabs.component'
+import ErrorMessage from '../widgets/error-message.component'
+import BillingCycleTabs from './billing-cycle-tabs/billing-cycle-tabs.component'
 
 
 class BillingCycle extends Component {
@@ -28,11 +29,21 @@ class BillingCycle extends Component {
         }
     }
 
+    processResponseError(resp) {
+        if(resp == "Error: Network Error") {
+            return {message: "The data service is temporarily unavailable", duration: null}
+        }
+    }
+
     render() {
         return (
-            <BillingCycleTabs billingCycles={this.props.billingCycles} 
-                                onNextBillingCyclesPage={this.handleNextBillingCyclesPage}
-                                allBillingCyclesLoaded={this.props.allBillingCyclesLoaded} />
+            <div>
+                <BillingCycleTabs billingCycles={this.props.billingCycles} 
+                                    onNextBillingCyclesPage={this.handleNextBillingCyclesPage}
+                                    allBillingCyclesLoaded={this.props.allBillingCyclesLoaded} />
+                <ErrorMessage resp={this.props.errorResp} processResponseError={this.processResponseError} action="Retry" onRequestClose={this.handleNextBillingCyclesPage} onAction={this.handleNextBillingCyclesPage}/>
+            </div>
+            
         )
     }
 }
@@ -40,7 +51,8 @@ class BillingCycle extends Component {
 const mapStateToProps = state => ({
     billingCycles: state.billingCycle.billingCycles, 
     page: state.billingCycle.page,
-    allBillingCyclesLoaded: state.billingCycle.allBillingCyclesLoaded
+    allBillingCyclesLoaded: state.billingCycle.allBillingCyclesLoaded,
+    errorResp: state.billingCycle.errorResp
 })
 const mapDispatchToProps = dispatch => bindActionCreators({changeTitle, onBillingCycleFetch}, dispatch)
 

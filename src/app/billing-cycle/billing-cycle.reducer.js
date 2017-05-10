@@ -12,7 +12,13 @@ export default (state = INITIAL_STATE, action) => {
         case BILLING_CYCLE.BILLING_CYCLES_FETCHED:
             const newBillingCycles = state.billingCycles.slice()
             Array.prototype.forEach.call(action.payload.billingCycles, billingCycle => newBillingCycles.push(billingCycle))
-            return {...state, page: action.payload.page, billingCycles: newBillingCycles, allBillingCyclesLoaded: action.payload.allBillingCyclesLoaded}
+            return {
+                ...state, 
+                page: action.payload.page, 
+                billingCycles: newBillingCycles, 
+                allBillingCyclesLoaded: action.payload.allBillingCyclesLoaded, 
+                errorResp: null
+            }
         case BILLING_CYCLE.BILLING_CYCLES_FETCH_FAILED:
             return {...state, errorResp: action.payload}
         default:

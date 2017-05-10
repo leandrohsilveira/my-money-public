@@ -24,7 +24,7 @@ class Dashboard extends Component {
 
     processResponseError(resp) {
         if(resp == "Error: Network Error") {
-            return {message: "Error loading data from the server", duration: null}
+            return {message: "The data service is temporarily unavailable", duration: null}
         }
     }
 
