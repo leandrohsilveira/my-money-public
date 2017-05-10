@@ -6,6 +6,7 @@ import FontIcon from 'material-ui/FontIcon'
 
 
 import BillingCycleListTab from './billing-cycle-list-tab.component'
+import BillingCycleCreateTab from './billing-cycle-create-tab.component'
 
 const ICON_TAB_LIST = <FontIcon className="mi mi-format-list-bulleted" color={white} />
 const ICON_TAB_CREATE = <FontIcon className="mi mi-add" color={white} />
@@ -40,7 +41,7 @@ export default class BillingCycleTabs extends Component {
         )
         const tabCreate = (
             <Tab key="Create" icon={ICON_TAB_CREATE} label="Create" value="Create" onActive={this.props.onCreateTabSelect}>
-                Create tab
+                <BillingCycleCreateTab onCreate={this.props.onCreate} />
             </Tab>
         )
         const tabEdit = (

@@ -24,7 +24,7 @@ const BillingCycleListItem = props => {
         </IconMenu>
     )
     return (
-        <ListItem primaryText={props.billingCycle.name} rightIconButton={moreActionsMenu} />
+        <ListItem primaryText={props.billingCycle.name} secondaryText={`${props.billingCycle.month}/${props.billingCycle.year}`} rightIconButton={moreActionsMenu} />
     )
 }
 
@@ -41,10 +41,8 @@ export default props => {
     }
 
     return (
-        <Card>
-            <List>
-                {rows}
-            </List>
-        </Card>
+        <List>
+            {rows}
+        </List>
     )
 }

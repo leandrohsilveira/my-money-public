@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
 import {changeTitle} from '../layout/layout.actions'
-import {onBillingCycleFetch} from './billing-cycle.actions'
+import {onBillingCycleFetch, onBillingCycleCreate} from './billing-cycle.actions'
 
 import ErrorMessage from '../widgets/error-message.component'
 import BillingCycleTabs from './billing-cycle-tabs/billing-cycle-tabs.component'
@@ -39,6 +39,7 @@ class BillingCycle extends Component {
         return (
             <div>
                 <BillingCycleTabs billingCycles={this.props.billingCycles} 
+                                    onCreate={this.props.onBillingCycleCreate}
                                     onNextBillingCyclesPage={this.handleNextBillingCyclesPage}
                                     allBillingCyclesLoaded={this.props.allBillingCyclesLoaded} />
                 <ErrorMessage resp={this.props.errorResp} processResponseError={this.processResponseError} action="Retry" onRequestClose={this.handleNextBillingCyclesPage} onAction={this.handleNextBillingCyclesPage}/>
@@ -54,6 +55,6 @@ const mapStateToProps = state => ({
     allBillingCyclesLoaded: state.billingCycle.allBillingCyclesLoaded,
     errorResp: state.billingCycle.errorResp
 })
-const mapDispatchToProps = dispatch => bindActionCreators({changeTitle, onBillingCycleFetch}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({changeTitle, onBillingCycleFetch, onBillingCycleCreate}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(BillingCycle);

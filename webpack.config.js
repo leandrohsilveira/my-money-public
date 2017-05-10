@@ -9,7 +9,13 @@ module.exports = {
     },
     devServer: {
         port: 8080,
-        contentBase: './www'
+        contentBase: './www',
+        proxy: {
+            '/api': {
+                target: 'http://localhost:3003',
+                secure: false
+            }
+        }
     },
     resolve: {
         extensions: ['', '.js', '.jsx'],

@@ -7,6 +7,15 @@ export const BILLING_CYCLE = {
     BILLING_CYCLES_FETCH_FAILED: 'BILLING_CYCLE.BILLING_CYCLES_FETCH_FAILED'
 }
 
+export const onBillingCycleCreate = (values) => {
+
+    axios.post(api('billing-cycles'), values)
+    return {
+        type: 'TEMP'
+    }
+
+}
+
 export const onBillingCycleFetch = (page = 1, limit = 10) => {
     return dispatch => {
         const skip = page * limit - limit
