@@ -3,6 +3,7 @@ import React, {Component} from 'react'
 import {white} from 'material-ui/styles/colors'
 import {Tabs, Tab} from 'material-ui/Tabs'
 import FontIcon from 'material-ui/FontIcon'
+import RaisedButton from 'material-ui/RaisedButton'
 
 import BillingCycleList from './billing-cycle-list.component'
 
@@ -26,12 +27,18 @@ export default class BillingCycleTabs extends Component {
         const iconTabCreate = <FontIcon className="mi mi-add" color={white} />
         const iconTabEdit = <FontIcon className="mi mi-edit" color={white} />
         const iconTabDelete = <FontIcon className="mi mi-delete" color={white} />
+        const loadMoreIcon = <FontIcon className="mi mi-expand-more" />
         return ( 
             <Tabs value={this.state.tab} onChange={this.handleChange}>
                 <Tab icon={iconTabList} label="List" value="List">
-                    <BillingCycleList billingCycles={this.props.billingCycles} 
-                                    allBillingCyclesLoaded={this.props.allBillingCyclesLoaded}
-                                    onNextBillingCyclesPage={this.props.onNextBillingCyclesPage} />
+                    <div className="content">
+                        <BillingCycleList billingCycles={this.props.billingCycles} />
+                        <RaisedButton disabled={this.props.allBillingCyclesLoaded} 
+                                onTouchTap={this.props.onNextBillingCyclesPage}
+                                primary={true} 
+                                icon={loadMoreIcon} 
+                                label="Load more" />
+                    </div>
                 </Tab>
                 <Tab icon={iconTabCreate} label="Create" value="Create" onActive={this.props.onCreateTabSelect}>
                     Create tab

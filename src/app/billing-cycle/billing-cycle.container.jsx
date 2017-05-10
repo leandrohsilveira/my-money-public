@@ -17,7 +17,7 @@ class BillingCycle extends Component {
     }
     
     componentWillMount() {
-        this.props.changeTitle("Billing cycle")
+        this.props.changeTitle("Billing cycles")
         this.handleNextBillingCyclesPage()
     }
 
