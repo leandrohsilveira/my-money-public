@@ -9,6 +9,7 @@ import {cyan800} from 'material-ui/styles/colors';
 
 import Header from './header.component'
 import Sidebar from './sidebar.component'
+import Messages from '../widgets/messages.component'
 
 import {onSideBarToggle} from './layout.actions'
 
@@ -25,6 +26,7 @@ const Layout = props => {
                 <Header title={props.title} onSidebarOpen={props.onSideBarToggle}></Header>
                 <Sidebar open={props.sideBarOpen} onChange={props.onSideBarToggle} docked={false}></Sidebar>
                 {props.children}
+                <Messages />
             </div>
         </MuiThemeProvider>
     )

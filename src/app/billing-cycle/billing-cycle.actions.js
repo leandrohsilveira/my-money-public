@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import {toastr} from 'react-redux-toastr'
+
 import {api} from '../configs'
 
 export const BILLING_CYCLE = {
@@ -10,6 +12,21 @@ export const BILLING_CYCLE = {
 export const onBillingCycleCreate = (values) => {
 
     axios.post(api('billing-cycles'), values)
+            .then(resp => {
+                toastr.success('Sucesso', 'Operação realizada com sucesso')
+            })
+            .catch(e => {
+                const title = e.response.data.message
+                console.log(e.response)
+                switch(e.response.status) {
+                    case 400:
+                        Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message.replace('Path', 'Field')))
+                        break
+                    default:
+                        Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message))
+                        break
+                }
+            })
     return {
         type: 'TEMP'
     }
