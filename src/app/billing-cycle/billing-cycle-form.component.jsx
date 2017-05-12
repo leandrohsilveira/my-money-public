@@ -2,10 +2,13 @@ import React, { Component } from 'react'
 
 import {reduxForm, Field as ReduxField} from 'redux-form'
 
+import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import FlatButton from 'material-ui/FlatButton'
 import RaisedButton from 'material-ui/RaisedButton'
 import {Card, CardText, CardActions} from 'material-ui/Card'
+
+import Input from '../widgets/input.component'
 
 const saveIcon = <FontIcon className="mi mi-save" />
 
@@ -16,10 +19,18 @@ class BillingCycleForm extends Component {
         return (
             <form role="form" onSubmit={this.props.handleSubmit}>
                 <Card>
-                    <CardText className="start-xs">
-                        <ReduxField name="name" component="input" />
-                        <ReduxField name="month" component="input" />
-                        <ReduxField name="year" component="input" />
+                    <CardText>
+                        <div className="row center-xs">
+                            <div className="col-sm-12 col-md">
+                                <ReduxField name="name" component={Input} className="col-xs-12" type="text" label="Name" />
+                            </div>
+                            <div className="col-sm-12 col-md">
+                                <ReduxField name="month" component={Input} className="col-xs-12" type="number" label="Month" />
+                            </div>
+                            <div className="col-sm-12 col-md">
+                                <ReduxField name="year" component={Input} className="col-xs-12" type="number" label="Year" />
+                            </div>
+                        </div>
                     </CardText>
                     <CardActions className="end-xs">
                         <FlatButton label="Cancel" />
