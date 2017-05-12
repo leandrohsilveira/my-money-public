@@ -20,15 +20,15 @@ export const onBillingCycleCreate = (values) => {
 
     return dispatch => {
         axios.post(api('billing-cycles'), values)
-                .then(resp => {
-
-                })
-                .then(resp => {
-                    return doBillingCycleFetch(dispatch)
-                })
+                .then(resp => dispatch({
+                    type: BILLING_CYCLE.CREATED
+                }))
                 .then(resp => {
                     toastr.success('Sucesso', 'Operação realizada com sucesso')
-                    return dispatch(onTabChange('List'))
+                    return dispatch([
+                        doBillingCycleFetch(dispatch),
+                        onTabChange('List')
+                    ]);
                 })
                 .catch(e => {
                     const title = e.response.data.message
