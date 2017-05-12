@@ -1,6 +1,7 @@
 import {BILLING_CYCLE} from './billing-cycle.actions'
 
 const INITIAL_STATE = {
+    tab: '',
     billingCycles: [],
     page: 0,
     allBillingCyclesLoaded: false,
@@ -9,7 +10,12 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
     switch(action.type) {
-        case BILLING_CYCLE.BILLING_CYCLES_FETCHED:
+        case BILLING_CYCLE.TAB_CHANGED:
+            return {
+                ...state,
+                tab: action.payload
+            }
+        case BILLING_CYCLE.FETCHED:
             const newBillingCycles = state.billingCycles.slice()
             Array.prototype.forEach.call(action.payload.billingCycles, billingCycle => newBillingCycles.push(billingCycle))
             return {
@@ -19,7 +25,7 @@ export default (state = INITIAL_STATE, action) => {
                 allBillingCyclesLoaded: action.payload.allBillingCyclesLoaded, 
                 errorResp: null
             }
-        case BILLING_CYCLE.BILLING_CYCLES_FETCH_FAILED:
+        case BILLING_CYCLE.FETCH_FAILED:
             return {...state, errorResp: action.payload}
         default:
             return state
