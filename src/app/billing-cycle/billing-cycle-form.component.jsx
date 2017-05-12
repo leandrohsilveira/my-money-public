@@ -22,13 +22,13 @@ class BillingCycleForm extends Component {
                     <CardText>
                         <div className="row center-xs">
                             <div className="col-sm-12 col-md">
-                                <ReduxField name="name" component={Input} className="col-xs-12" type="text" label="Name" />
+                                <ReduxField name="name" component={Input} type="text" label="Name" />
                             </div>
                             <div className="col-sm-12 col-md">
-                                <ReduxField name="month" component={Input} className="col-xs-12" type="number" label="Month" />
+                                <ReduxField name="month" component={Input} type="number" label="Month" />
                             </div>
                             <div className="col-sm-12 col-md">
-                                <ReduxField name="year" component={Input} className="col-xs-12" type="number" label="Year" />
+                                <ReduxField name="year" component={Input} type="number" label="Year" />
                             </div>
                         </div>
                     </CardText>
