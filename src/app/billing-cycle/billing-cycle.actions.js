@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import {toastr} from 'react-redux-toastr'
+import {reset as resetForm} from 'redux-form'
 
 import {api} from '../configs'
 
@@ -26,6 +27,7 @@ export const onBillingCycleCreate = (values) => {
                 .then(resp => {
                     toastr.success('Sucesso', 'Operação realizada com sucesso')
                     return dispatch([
+                        resetForm('billingCycleForm'),
                         doBillingCycleFetch(dispatch),
                         onTabChange('List')
                     ]);
