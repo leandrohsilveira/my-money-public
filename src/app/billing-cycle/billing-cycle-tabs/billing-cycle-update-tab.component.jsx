@@ -6,7 +6,7 @@ export default props => (
     <div className="content">
         <div className="row center-xs">
             <div className="col-xs-6">
-                <BillingCycleForm onSubmit={props.onCreate} onCancel={props.onCancel} onReset={props.onReset} />
+                <BillingCycleForm billingCycle={props.billingCycle} onSubmit={props.onUpdate} onCancel={props.onCancel} onReset={props.onReset} />
             </div>
         </div>
     </div>

@@ -7,6 +7,7 @@ import {api} from '../configs'
 
 export const BILLING_CYCLE = {
     TAB_CHANGED: 'BILLING_CYCLE.TAB_CHANGED',
+    TABS_VISIBILITY_CHANGE: 'BILLING_CYCLE.TABS_VISIBILITY_CHANGE',
     CREATED: 'BILLING_CYCLE.CREATED',
     FETCHED: 'BILLING_CYCLE.FETCHED',
     FETCH_FAILED: 'BILLING_CYCLE.FETCH_FAILED'
@@ -15,6 +16,11 @@ export const BILLING_CYCLE = {
 export const onTabChange = (tab) => ({
     type: BILLING_CYCLE.TAB_CHANGED,
     payload: tab
+})
+
+export const onTabsVisibilityChange = (tabs) => ({
+    type: BILLING_CYCLE.TABS_VISIBILITY_CHANGE,
+    payload: tabs
 })
 
 export const onBillingCycleCreate = (values) => {

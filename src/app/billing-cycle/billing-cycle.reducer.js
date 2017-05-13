@@ -2,6 +2,7 @@ import {BILLING_CYCLE} from './billing-cycle.actions'
 
 const INITIAL_STATE = {
     tab: '',
+    tabsVisibility: [],
     billingCycles: [],
     page: 0,
     allBillingCyclesLoaded: false,
@@ -14,6 +15,11 @@ export default (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 tab: action.payload
+            }
+        case BILLING_CYCLE.TABS_VISIBILITY_CHANGE:
+            return {
+                ...state,
+                tabsVisibility: action.payload
             }
         case BILLING_CYCLE.FETCHED:
             const newBillingCycles = state.billingCycles.slice()
