@@ -30,9 +30,8 @@ const BillingCycleListItem = props => {
 
 export default props => {
     const billingCycles = props.billingCycles || []
-    console.debug('Rendering BillingCycleList', billingCycles)
     const rows = billingCycles.map(billingCycle => (
-        <BillingCycleListItem key={billingCycle._id} billingCycle={billingCycle} />
+        <BillingCycleListItem key={billingCycle._id} onEdit={props.onEdit} onDelete={props.onDelete} billingCycle={billingCycle} />
     ))
     if(!rows.length) {
         rows.push((

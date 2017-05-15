@@ -14,7 +14,7 @@ export default props => (
             <div className="col-xs-6">
                 <Card>
                     <CardText className="start-xs">
-                        <BillingCycleList billingCycles={props.billingCycles} />
+                        <BillingCycleList billingCycles={props.billingCycles} onEdit={props.onEdit} onDelete={props.onDelete} />
                     </CardText>
                     <CardActions>
                         <RaisedButton disabled={props.allBillingCyclesLoaded} 

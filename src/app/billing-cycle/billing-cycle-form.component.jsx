@@ -11,6 +11,7 @@ import {Card, CardText, CardActions} from 'material-ui/Card'
 import Input from '../widgets/input.component'
 
 const saveIcon = <FontIcon className="mi mi-save" />
+const cancelIcon = <FontIcon className="mi mi-close" />
 
 class BillingCycleForm extends Component {
 
@@ -22,19 +23,24 @@ class BillingCycleForm extends Component {
                     <CardText>
                         <div className="row center-xs">
                             <div className="col-sm-12 col-md">
-                                <ReduxField name="name" component={Input} type="text" label="Name" />
+                                <ReduxField name="name" component={Input} type="text" label="Name" disabled={this.props.readOnly} />
                             </div>
                             <div className="col-sm-12 col-md">
-                                <ReduxField name="month" component={Input} type="number" label="Month" />
+                                <ReduxField name="month" component={Input} type="number" label="Month" disabled={this.props.readOnly} />
                             </div>
                             <div className="col-sm-12 col-md">
-                                <ReduxField name="year" component={Input} type="number" label="Year" />
+                                <ReduxField name="year" component={Input} type="number" label="Year" disabled={this.props.readOnly} />
                             </div>
                         </div>
                     </CardText>
                     <CardActions className="end-xs">
-                        <FlatButton label="Cancel" />
-                        <RaisedButton type="submit" label="Save" primary={true} icon={saveIcon} />
+                        {!this.props.readOnly ? (
+                            <FlatButton label="Reset" onTouchTap={this.props.onReset} />
+                        ) : (
+                            <div></div>
+                        )}
+                        <FlatButton label="Cancel" onTouchTap={this.props.onCancel} icon={cancelIcon} />
+                        <RaisedButton type="submit" label={this.props.submitText || 'Save'} primary={true} icon={saveIcon} />
                     </CardActions>
                 </Card>
             </form>
@@ -43,4 +49,4 @@ class BillingCycleForm extends Component {
 
 }
 
-export default reduxForm({form: 'billingCycleForm'})(BillingCycleForm)
+export default reduxForm({form: 'billingCycleForm', destroyOnUnmount: false})(BillingCycleForm)

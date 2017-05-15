@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import {toastr} from 'react-redux-toastr'
-import {reset as resetForm} from 'redux-form'
+import {reset as resetForm, initialize} from 'redux-form'
 
 import {api} from '../configs'
 
@@ -9,21 +9,23 @@ export const BILLING_CYCLE = {
     TAB_CHANGED: 'BILLING_CYCLE.TAB_CHANGED',
     TABS_VISIBILITY_CHANGE: 'BILLING_CYCLE.TABS_VISIBILITY_CHANGE',
     CREATED: 'BILLING_CYCLE.CREATED',
+    UPDATED: 'BILLING_CYCLE.UPDATED',
+    DELETED: 'BILLING_CYCLE.DELETED',
     FETCHED: 'BILLING_CYCLE.FETCHED',
     FETCH_FAILED: 'BILLING_CYCLE.FETCH_FAILED'
 }
 
-export const onTabChange = (tab) => ({
+export const changeTab = (tab) => ({
     type: BILLING_CYCLE.TAB_CHANGED,
     payload: tab
 })
 
-export const onTabsVisibilityChange = (tabs) => ({
+export const changeTabsVisibility = (tabs) => ({
     type: BILLING_CYCLE.TABS_VISIBILITY_CHANGE,
     payload: tabs
 })
 
-export const onBillingCycleCreate = (values) => {
+export const createBillingCycle = (values) => {
 
     return dispatch => {
         axios.post(api('billing-cycles'), values)
@@ -31,36 +33,97 @@ export const onBillingCycleCreate = (values) => {
                     type: BILLING_CYCLE.CREATED
                 }))
                 .then(resp => {
-                    toastr.success('Sucesso', 'Operação realizada com sucesso')
+                    toastr.success('Success', 'Billing cycle successfully registered')
                     return dispatch([
                         resetForm('billingCycleForm'),
-                        doBillingCycleFetch(dispatch),
-                        onTabChange('List')
+                        doBillingCycleFetch(dispatch, true),
+                        changeTab('List')
                     ]);
                 })
-                .catch(e => {
-                    const title = e.response.data.message
-                    console.log(e.response)
-                    switch(e.response.status) {
-                        case 400:
-                            Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message.replace('Path', 'Field')))
-                            break
-                        default:
-                            Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message))
-                            break
-                    }
-                })
+                .catch(e => handleResponseError(e))
 
     }
 }
 
-export const onBillingCycleFetch = (page, limit) => {
+export const updateBillingCycle = (values) => {
+
     return dispatch => {
-        return doBillingCycleFetch(dispatch, page, limit)
+        axios.put(api(`billing-cycles/${values._id}`), values)
+                .then(resp => dispatch({
+                    type: BILLING_CYCLE.UPDATED
+                }))
+                .then(resp => {
+                    toastr.success('Success', 'Billing cycle successfully updated')
+                    return dispatch([
+                        initialize('billingCycleForm', null),
+                        doBillingCycleFetch(dispatch, true),
+                        changeTabsVisibility(['List', 'Create']),
+                        changeTab('List')
+                    ]);
+                })
+                .catch(e => handleResponseError(e))
+
     }
 }
 
-function doBillingCycleFetch(dispatch, page = 1, limit = 10) {
+
+export const submitDeleteBillingCycle = (values) => {
+
+    return dispatch => {
+        axios.delete(api(`billing-cycles/${values._id}`))
+                .then(resp => dispatch({
+                    type: BILLING_CYCLE.DELETED
+                }))
+                .then(resp => {
+                    toastr.success('Success', 'Billing cycle successfully deleted')
+                    return dispatch([
+                        initialize('billingCycleForm', null),
+                        doBillingCycleFetch(dispatch, true),
+                        changeTabsVisibility(['List', 'Create']),
+                        changeTab('List')
+                    ]);
+                })
+                .catch(e => handleResponseError(e))
+
+    }
+}
+
+export const fetchBillingCycles = (page, limit) => {
+    return dispatch => {
+        return doBillingCycleFetch(dispatch, false, page, limit)
+    }
+}
+
+export const editBillingCycle = (billingCycle) => {
+    return [
+        changeTabsVisibility(['Edit']),
+        changeTab('Edit'),
+        initialize('billingCycleForm', billingCycle)
+    ]
+}
+
+export const deleteBillingCycle = (billingCycle) => {
+    return [
+        changeTabsVisibility(['Delete']),
+        changeTab('Delete'),
+        initialize('billingCycleForm', billingCycle)
+    ]
+}
+
+function handleResponseError(e) {
+    const title = e.response.data.message
+    console.log(e.response)
+    switch(e.response.status) {
+        case 400:
+            Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message.replace('Path', 'Field')))
+            break
+        default:
+            Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message))
+            break
+    }
+}
+
+function doBillingCycleFetch(dispatch, reset = false, page = 1, limit = 10) {
     const skip = page * limit - limit
     axios.get(api('billing-cycles/count'))
             .then(resp => {
@@ -74,6 +137,7 @@ function doBillingCycleFetch(dispatch, page = 1, limit = 10) {
                             payload: {
                                 billingCycles: resp.data,
                                 page,
+                                reset,
                                 allBillingCyclesLoaded: page >= 1 + parseInt(count/limit)
                             }
                         })

@@ -6,13 +6,22 @@ import FontIcon from 'material-ui/FontIcon'
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
+import {reset as resetForm, initialize as initializeForm} from 'redux-form'
 
 import {changeTitle} from '../../layout/layout.actions'
-import {onTabChange, onTabsVisibilityChange, onBillingCycleFetch, onBillingCycleCreate} from '../billing-cycle.actions'
+import {
+    changeTab, 
+    changeTabsVisibility, 
+    fetchBillingCycles, 
+    createBillingCycle, 
+    updateBillingCycle,
+    submitDeleteBillingCycle,
+    editBillingCycle,
+    deleteBillingCycle
+} from '../billing-cycle.actions'
 
 import BillingCycleListTab from './billing-cycle-list-tab.component'
-import BillingCycleCreateTab from './billing-cycle-create-tab.component'
-import BillingCycleUpdateTab from './billing-cycle-update-tab.component'
+import BillingCycleFormTab from './billing-cycle-form-tab.component'
 import ErrorMessage from '../../widgets/error-message.component'
 
 const ICON_TAB_LIST = <FontIcon className="mi mi-format-list-bulleted" color={white} />
@@ -25,20 +34,32 @@ class BillingCycleTabs extends Component {
     constructor(props) {
         super(props)
         this.handleNextBillingCyclesPage = this.handleNextBillingCyclesPage.bind(this)
+        this.handleFormCancel = this.handleFormCancel.bind(this)
+        this.handleFormReset = this.handleFormReset.bind(this)
     }
 
     componentWillMount() {
         this.props.changeTitle("Billing cycles")
-        this.props.onTabChange('List')
-        this.props.onTabsVisibilityChange(['List', 'Create'])
+        this.props.changeTab('List')
+        this.props.changeTabsVisibility(['List', 'Create'])
         this.handleNextBillingCyclesPage()
     }
 
     handleNextBillingCyclesPage() {
         if(!this.props.allBillingCyclesLoaded) {
             console.debug('handleNextBillingCyclesPage(), this.props.page:', this.props.page + 1)
-            this.props.onBillingCycleFetch(this.props.page + 1);
+            this.props.fetchBillingCycles(this.props.page + 1);
         }
+    }
+
+    handleFormReset() {
+        this.props.resetForm('billingCycleForm')
+    }
+
+    handleFormCancel() {
+        this.props.changeTab('List')
+        this.props.changeTabsVisibility(['List', 'Create'])
+        this.props.initializeForm('billingCycleForm', null)
     }
 
     processResponseError(resp) {
@@ -52,23 +73,25 @@ class BillingCycleTabs extends Component {
             List: (
                 <Tab key="List" icon={ICON_TAB_LIST} label="List" value="List">
                     <BillingCycleListTab billingCycles={this.props.billingCycles}
+                                            onEdit={this.props.editBillingCycle}
+                                            onDelete={this.props.deleteBillingCycle}
                                             allBillingCyclesLoaded={this.props.allBillingCyclesLoaded}
                                             onNextBillingCyclesPage={this.handleNextBillingCyclesPage} />
                 </Tab>
             ),
             Create: (
                 <Tab key="Create" icon={ICON_TAB_CREATE} label="Create" value="Create" onActive={this.props.onCreateTabSelect}>
-                    <BillingCycleCreateTab onCreate={this.props.onBillingCycleCreate} />
+                    <BillingCycleFormTab submitText="Create" onSave={this.props.createBillingCycle} onCancel={this.handleFormCancel} onReset={this.handleFormReset} />
                 </Tab>
             ),
-            Update: (
+            Edit: (
                 <Tab key="Edit" icon={ICON_TAB_EDIT} label="Edit" value="Edit" onActive={this.props.onEditTabSelect}>
-                    <BillingCycleUpdateTab  />
+                    <BillingCycleFormTab submitText="Update" onSave={this.props.updateBillingCycle} onCancel={this.handleFormCancel} onReset={this.handleFormReset} />
                 </Tab>
             ),
             Delete: (
                 <Tab key="Delete" icon={ICON_TAB_DELETE} label="Delete" value="Delete" onActive={this.props.onDeleteTabSelect}>
-                    Delete tab
+                    <BillingCycleFormTab submitText="Delete" readOnly={true} onSave={this.props.submitDeleteBillingCycle} onCancel={this.handleFormCancel} />
                 </Tab>
             )
         }
@@ -77,7 +100,7 @@ class BillingCycleTabs extends Component {
 
         return ( 
             <div>
-                <Tabs value={this.props.tab} onChange={this.props.onTabChange}>
+                <Tabs value={this.props.tab} onChange={this.props.changeTab}>
                     {tabs}
                 </Tabs>
                 <ErrorMessage resp={this.props.errorResp} processResponseError={this.processResponseError} action="Retry" onRequestClose={this.handleNextBillingCyclesPage} onAction={this.handleNextBillingCyclesPage}/>
@@ -95,6 +118,18 @@ const mapStateToProps = state => ({
     errorResp: state.billingCycle.errorResp,
     tabsVisibility: state.billingCycle.tabsVisibility
 })
-const mapDispatchToProps = dispatch => bindActionCreators({changeTitle, onTabChange, onTabsVisibilityChange, onBillingCycleFetch, onBillingCycleCreate}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({
+    changeTitle, 
+    changeTab, 
+    changeTabsVisibility, 
+    fetchBillingCycles, 
+    createBillingCycle,
+    updateBillingCycle,
+    submitDeleteBillingCycle,
+    editBillingCycle,
+    deleteBillingCycle,
+    resetForm,
+    initializeForm
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(BillingCycleTabs);

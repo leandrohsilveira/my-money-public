@@ -22,8 +22,13 @@ export default (state = INITIAL_STATE, action) => {
                 tabsVisibility: action.payload
             }
         case BILLING_CYCLE.FETCHED:
-            const newBillingCycles = state.billingCycles.slice()
-            Array.prototype.forEach.call(action.payload.billingCycles, billingCycle => newBillingCycles.push(billingCycle))
+            let newBillingCycles
+            if(action.payload.reset) {
+                newBillingCycles = action.payload.billingCycles
+            } else {
+                newBillingCycles = state.billingCycles.slice()
+                Array.prototype.forEach.call(action.payload.billingCycles, billingCycle => newBillingCycles.push(billingCycle))
+            }
             return {
                 ...state, 
                 page: action.payload.page, 
