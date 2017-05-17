@@ -2,7 +2,7 @@ import {BILLING_CYCLE} from './billing-cycle.actions'
 
 const INITIAL_STATE = {
     tab: '',
-    tabsVisibility: [],
+    tabsVisibility: {},
     billingCycles: [],
     page: 0,
     allBillingCyclesLoaded: false,

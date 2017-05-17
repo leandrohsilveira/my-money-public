@@ -1,31 +1,26 @@
 import React from 'react'
 
-import {white} from 'material-ui/styles/colors'
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import AppBar from 'material-ui/AppBar'
-import FontIcon from 'material-ui/FontIcon'
-import Divider from 'material-ui/Divider'
-import Subheader from 'material-ui/Subheader'
+import Drawer from 'react-toolbox/lib/drawer/Drawer'
+import AppBar from 'react-toolbox/lib/app_bar/AppBar'
+import FontIcon from 'react-toolbox/lib/font_icon/FontIcon'
+import MenuDivider from 'react-toolbox/lib/menu/MenuDivider'
 
 import NavMenuItem from '../widgets/nav-menu-item.component'
 
 export default props => {
     const appIconStyle = {
-        marginTop: 5,
         fontSize: 36
     }
     const appIcon = (
-        <FontIcon className="mi mi-attach-money mi-light mi-48" color={white} style={appIconStyle}></FontIcon>
+        <i className="mi mi-attach-money mi-light mi-48" style={appIconStyle}></i>
     )
 
     return (
-        <Drawer open={props.open} onRequestChange={props.onChange} docked={props.docked}>
-            <AppBar title="My Money" iconElementLeft={appIcon}></AppBar>
-            <NavMenuItem href="/dashboard" onClick={props.onChange} iconClass="mi mi-home" value="Dashboard"></NavMenuItem>
-            <Divider></Divider>
-            <Subheader>Registry</Subheader>
-            <NavMenuItem href="/billing-cycles" onClick={props.onChange} iconClass="mi mi-library-add" value="Billing cycles"></NavMenuItem>
+        <Drawer active={props.open} onOverlayClick={props.onChange}>
+            <AppBar title="My Money" leftIcon={appIcon}></AppBar>
+            <NavMenuItem href="/dashboard" onClick={props.onChange} iconClass="mi mi-home mi-24" value="Dashboard"></NavMenuItem>
+            <MenuDivider />
+            <NavMenuItem href="/billing-cycles" onClick={props.onChange} iconClass="mi mi-library-add mi-24" value="Billing cycles"></NavMenuItem>
         </Drawer>
     )
 }

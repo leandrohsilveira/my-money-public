@@ -2,33 +2,25 @@ import React, {Component} from 'react'
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
-
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import {cyan800} from 'material-ui/styles/colors';
+import ThemeProvider from 'react-toolbox/lib/ThemeProvider'
 
 import Header from './header.component'
 import Sidebar from './sidebar.component'
 import Messages from '../widgets/messages.component'
+import theme from '../../toolbox/theme'
 
 import {onSideBarToggle} from './layout.actions'
 
 const Layout = props => {
-    const muiTheme = getMuiTheme({
-        palette: {
-            primary1Color: cyan800
-        }
-    });
-
     return (
-        <MuiThemeProvider muiTheme={muiTheme}>
+        <ThemeProvider theme={theme}>
             <div>
                 <Header title={props.title} onSidebarOpen={props.onSideBarToggle}></Header>
                 <Sidebar open={props.sideBarOpen} onChange={props.onSideBarToggle} docked={false}></Sidebar>
                 {props.children}
                 <Messages />
             </div>
-        </MuiThemeProvider>
+        </ThemeProvider>
     )
 }
 

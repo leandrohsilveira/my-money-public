@@ -3,3 +3,4 @@ import 'modules/material-icons/css/material-icons.min.css'
 import 'modules/flexboxgrid/css/flexboxgrid.min.css'
 
 import './style.css'
+import '../toolbox/theme.css'

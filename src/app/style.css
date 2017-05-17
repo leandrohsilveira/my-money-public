@@ -14,8 +14,16 @@ body {
     }
 }
 
+.mi {
+    margin-top: 4px;
+}
+
 .padding-top {
     padding-top: 10px;
+}
+
+.padding {
+    padding: 10px;
 }
 
 a.nav-menu-item,

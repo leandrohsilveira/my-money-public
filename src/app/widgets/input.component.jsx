@@ -1,9 +1,9 @@
 import React from 'react'
 
-import TextField from 'material-ui/TextField'
+import Input from 'react-toolbox/lib/input';
 
 export default props => {
     return (
-        <TextField className={props.className} floatingLabelText={props.label} disabled={props.disabled} {...props.input}></TextField>
+        <Input className={props.className} label={props.label} disabled={props.disabled} {...props.input}></Input>
     )
 }

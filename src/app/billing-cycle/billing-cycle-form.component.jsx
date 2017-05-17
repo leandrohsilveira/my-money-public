@@ -1,18 +1,16 @@
 import React, { Component } from 'react'
 
-import {reduxForm, Field as ReduxField} from 'redux-form'
+import {connect} from 'react-redux'
 
-import TextField from 'material-ui/TextField'
-import FontIcon from 'material-ui/FontIcon'
-import FlatButton from 'material-ui/FlatButton'
-import RaisedButton from 'material-ui/RaisedButton'
-import {Card, CardText, CardHeader} from 'material-ui/Card'
+import {reduxForm, Field as ReduxField, formValueSelector} from 'redux-form'
+
+import Button from 'react-toolbox/lib/button/Button'
 
 import Input from '../widgets/input.component'
 import CreditsForm from '../credits/credits-form.component'
 
-const saveIcon = <FontIcon className="mi mi-save" />
-const cancelIcon = <FontIcon className="mi mi-close" />
+const saveIcon = <i className="mi mi-save" />
+const cancelIcon = <i className="mi mi-close" />
 
 class BillingCycleForm extends Component {
 
@@ -21,29 +19,30 @@ class BillingCycleForm extends Component {
         return (
             <form role="form" onSubmit={this.props.handleSubmit}>
                 <div className="row center-xs">
-                    <ReduxField name="name" component={Input} className="col-sm-12 col-md" type="text" label="Name" disabled={this.props.readOnly} />
-                    <ReduxField name="month" component={Input} className="col-sm-12 col-md" type="number" label="Month" disabled={this.props.readOnly} />
-                    <ReduxField name="year" component={Input} className="col-sm-12 col-md" type="number" label="Year" disabled={this.props.readOnly} />
+                    <div className="col-sm-12 col-md padding">
+                        <ReduxField name="name" component={Input} className="col-sm-12 col-md padding" type="text" label="Name" disabled={this.props.readOnly} />
+                    </div>
+                    <div className="col-sm-12 col-md padding">
+                        <ReduxField name="month" component={Input} className="col-sm-12 col-md padding" type="number" label="Month" disabled={this.props.readOnly} />
+                    </div>
+                    <div className="col-sm-12 col-md padding">
+                        <ReduxField name="year" component={Input} className="col-sm-12 col-md padding" type="number" label="Year" disabled={this.props.readOnly} />
+                    </div>
                 </div>
                 <div className="row padding-top">
                     <div className="col-sm-12 col-md-6">
-                        <Card>
-                            <CardHeader title="Credits" />
-                            <CardText>
-                                <CreditsForm readOnly={this.props.readOnly} />
-                            </CardText>
-                        </Card>
+                        <CreditsForm readOnly={this.props.readOnly} credits={this.props.credits} />
                     </div>
                 </div>
                 <div className="row end-xs padding-top">
                     <div className="col-xs-12">
                         {!this.props.readOnly ? (
-                            <FlatButton label="Reset" onTouchTap={this.props.onReset} />
+                            <Button label="Reset" onClick={this.props.onReset} />
                         ) : (
                             <div></div>
                         )}
-                        <FlatButton label="Cancel" onTouchTap={this.props.onCancel} />
-                        <RaisedButton type="submit" label={this.props.submitText || 'Save'} primary={true} />
+                        <Button label="Cancel" onClick={this.props.onCancel} />
+                        <Button type="submit" raised flat label={this.props.submitText || 'Save'} primary={true} />
                     </div>
                 </div>
             </form>
@@ -52,4 +51,9 @@ class BillingCycleForm extends Component {
 
 }
 
-export default reduxForm({form: 'billingCycleForm', destroyOnUnmount: false})(BillingCycleForm)
+const selector = formValueSelector('billingCycleForm')
+const mapStateToProps = state => ({credits: selector(state, 'credits')})
+
+BillingCycleForm = reduxForm({form: 'billingCycleForm', destroyOnUnmount: false})(BillingCycleForm)
+BillingCycleForm = connect(mapStateToProps)(BillingCycleForm)
+export default BillingCycleForm

@@ -3,13 +3,11 @@ import React, { Component } from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
-import Snackbar from 'material-ui/Snackbar'
-
 import {changeTitle} from '../layout/layout.actions'
 import {onSummaryLoad} from './dashboard.actions'
 
 import Summary from '../widgets/summary.component'
-import ErrorMessage from '../widgets/error-message.component'
+// import ErrorMessage from '../widgets/error-message.component'
 
 class Dashboard extends Component {
 
@@ -28,11 +26,10 @@ class Dashboard extends Component {
         }
     }
 
-    render() {
+    render() { 
         return (
             <div className="content">
                 <Summary currency="R$" credits={this.props.summary.credit} debts={this.props.summary.debt}></Summary>
-                <ErrorMessage resp={this.props.errorResp} processResponseError={this.processResponseError} action="Retry" onRequestClose={this.props.onSummaryLoad} onAction={this.props.onSummaryLoad}/>
             </div>
         )
     }

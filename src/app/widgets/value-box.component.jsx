@@ -1,7 +1,9 @@
 import React from 'react'
 
-import FontIcon from 'material-ui/FontIcon'
-import {Card, CardHeader, CardText} from 'material-ui/Card'
+import FontIcon from 'react-toolbox/lib/font_icon'
+import Card from 'react-toolbox/lib/card/Card'
+import CardTitle from 'react-toolbox/lib/card/CardTitle'
+import CardText from 'react-toolbox/lib/card/CardText'
 
 export default props => {
 
@@ -12,13 +14,13 @@ export default props => {
     let icon = null
     if(props.icon) {
         icon = (
-            <FontIcon className={props.icon} style={props.style}></FontIcon>
+            <i className={props.icon} style={props.style}></i>
         )
     }
 
     return (
         <Card style={props.style}>
-            <CardHeader avatar={icon} titleStyle={props.style} title={props.title}></CardHeader>
+            <CardTitle avatar={icon} style={props.style} title={props.title} />
             <CardText style={{...defaultStyle, ...props.style}}>
                 {props.children}
             </CardText>

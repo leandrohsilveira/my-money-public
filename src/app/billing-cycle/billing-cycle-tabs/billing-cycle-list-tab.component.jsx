@@ -1,12 +1,13 @@
 import React from 'react'
 
-import FontIcon from 'material-ui/FontIcon'
-import RaisedButton from 'material-ui/RaisedButton'
-import {Card, CardText, CardActions} from 'material-ui/Card'
+import Button from 'react-toolbox/lib/button/Button'
+import Card from 'react-toolbox/lib/card/Card'
+import CardText from 'react-toolbox/lib/card/CardText'
+import CardActions from 'react-toolbox/lib/card/CardActions'
 
 import BillingCycleList from '../billing-cycle-list.component'
 
-const loadMoreIcon = <FontIcon className="mi mi-expand-more" />
+const loadMoreIcon = <i className="mi mi-expand-more" />
 
 export default props => (
     <div className="content">
@@ -17,12 +18,12 @@ export default props => (
                         <BillingCycleList billingCycles={props.billingCycles} onEdit={props.onEdit} onDelete={props.onDelete} />
                     </CardText>
                     <CardActions>
-                        <RaisedButton disabled={props.allBillingCyclesLoaded} 
-                                onTouchTap={props.onNextBillingCyclesPage}
+                        <Button raised flat
+                                disabled={props.allBillingCyclesLoaded} 
+                                onClick={props.onNextBillingCyclesPage}
                                 primary={true} 
                                 icon={loadMoreIcon} 
                                 label="Load more" />
-
                     </CardActions>
                 </Card>
             </div>

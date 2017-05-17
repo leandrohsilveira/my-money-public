@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import {toastr} from 'react-redux-toastr'
-import {reset as resetForm, initialize} from 'redux-form'
+import {reset as resetReduxForm, initialize as initializeReduxForm} from 'redux-form'
 
 import {api} from '../configs'
 
@@ -13,6 +13,13 @@ export const BILLING_CYCLE = {
     DELETED: 'BILLING_CYCLE.DELETED',
     FETCHED: 'BILLING_CYCLE.FETCHED',
     FETCH_FAILED: 'BILLING_CYCLE.FETCH_FAILED'
+}
+
+export const BILLING_CYCLE_FORM = {
+    NAME: 'billingCycleForm',
+    INITIAL_VALUE: {
+        credits: [{}]
+    }
 }
 
 export const changeTab = (tab) => ({
@@ -35,9 +42,9 @@ export const createBillingCycle = (values) => {
                 .then(resp => {
                     toastr.success('Success', 'Billing cycle successfully registered')
                     return dispatch([
-                        resetForm('billingCycleForm'),
+                        initializeForm(),
                         doBillingCycleFetch(dispatch, true),
-                        changeTab('List')
+                        changeTab(0)
                     ]);
                 })
                 .catch(e => handleResponseError(e))
@@ -55,10 +62,10 @@ export const updateBillingCycle = (values) => {
                 .then(resp => {
                     toastr.success('Success', 'Billing cycle successfully updated')
                     return dispatch([
-                        initialize('billingCycleForm', null),
+                        initializeForm(),
                         doBillingCycleFetch(dispatch, true),
-                        changeTabsVisibility(['List', 'Create']),
-                        changeTab('List')
+                        changeTabsVisibility({list: true, create: true}),
+                        changeTab(0)
                     ]);
                 })
                 .catch(e => handleResponseError(e))
@@ -77,10 +84,10 @@ export const submitDeleteBillingCycle = (values) => {
                 .then(resp => {
                     toastr.success('Success', 'Billing cycle successfully deleted')
                     return dispatch([
-                        initialize('billingCycleForm', null),
+                        initializeForm(),
                         doBillingCycleFetch(dispatch, true),
-                        changeTabsVisibility(['List', 'Create']),
-                        changeTab('List')
+                        changeTabsVisibility({list: true, create: true}),
+                        changeTab(0)
                     ]);
                 })
                 .catch(e => handleResponseError(e))
@@ -96,19 +103,23 @@ export const fetchBillingCycles = (page, limit) => {
 
 export const editBillingCycle = (billingCycle) => {
     return [
-        changeTabsVisibility(['Edit']),
-        changeTab('Edit'),
-        initialize('billingCycleForm', billingCycle)
+        changeTabsVisibility({edit: true}),
+        changeTab(2),
+        initializeForm(billingCycle)
     ]
 }
 
 export const deleteBillingCycle = (billingCycle) => {
     return [
-        changeTabsVisibility(['Delete']),
-        changeTab('Delete'),
-        initialize('billingCycleForm', billingCycle)
+        changeTabsVisibility({'delete': true}),
+        changeTab(3),
+        initializeForm(billingCycle)
     ]
 }
+
+export const initializeForm = (values = BILLING_CYCLE_FORM.INITIAL_VALUE) => initializeReduxForm(BILLING_CYCLE_FORM.NAME, values)
+
+export const resetForm = () => resetReduxForm(BILLING_CYCLE_FORM.NAME)
 
 function handleResponseError(e) {
     const title = e.response.data.message
