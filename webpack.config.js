@@ -26,6 +26,7 @@ module.exports = {
     plugins: [
         new ExtractTextPlugin('app.css')
     ],
+    devtool: 'source-map',
     module: {
         loaders:[{
             test: /.js[x]?$/,

@@ -23,8 +23,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     fetchBillingCycles
 }, dispatch)
 
-const loadMoreIcon = <i className="mi mi-expand-more" />
-
 @connect(mapStateToProps, mapDispatchToProps)
 export default class BillingCycleListContainer extends Component {
 
@@ -80,11 +78,11 @@ export default class BillingCycleListContainer extends Component {
                                     disabled={this.props.allBillingCyclesLoaded} 
                                     onClick={this.handleNextBillingCyclesPage}
                                     primary={true} 
-                                    icon={loadMoreIcon} 
+                                    icon="expand_more"
                                     label="Load more" />
                             
-                            <Button flat disabled={!this.state.selected.length} label="Edit" onClick={this.handleEdit} />
-                            <Button flat disabled={!this.state.selected.length} label="Delete" onClick={this.handleDelete} />
+                            <Button flat disabled={!this.state.selected.length} icon="edit" label="Edit" onClick={this.handleEdit} />
+                            <Button flat disabled={!this.state.selected.length} icon="delete" label="Delete" onClick={this.handleDelete} />
                         </CardActions>
                     </Card>
                 </div>

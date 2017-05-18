@@ -68,7 +68,7 @@ export default class BillingCycleFormContainer extends Component {
         <div className="content">
             <div className="row center-xs">
                 <div className="col-xs-12 col-sm-10">
-                    <BillingCycleForm submitText={this.props.type} 
+                    <BillingCycleForm submitText={this.props.type} submitIcon={this.props.type === 'DELETE' ? 'delete' : 'check'}
                                                     readOnly={this.props.type == 'DELETE'} 
                                                     onSubmit={this.handleSubmit} 
                                                     onCancel={() => this.props.history.push('/billing-cycles')} />

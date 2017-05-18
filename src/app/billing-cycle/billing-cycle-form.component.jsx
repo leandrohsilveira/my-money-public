@@ -122,10 +122,10 @@ export default class BillingCycleForm extends Component {
                             </div>
                         </CardText>
                         <CardActions>
-                            <Button type="submit" raised flat label={this.props.submitText || 'Save'} primary={true} />
-                            <Button label="Cancel" onClick={this.props.onCancel} />
+                            <Button type="submit" icon={this.props.submitIcon} raised flat label={this.props.submitText || 'Save'} primary={true} />
+                            <Button label="Cancel" icon="close" onClick={this.props.onCancel} />
                             {!this.props.readOnly ? (
-                                <Button label="Reset" onClick={this.handleReset} />
+                                <Button label="Reset" icon="undo" onClick={this.handleReset} />
                             ) : false }
                         </CardActions>
                     </Card>
