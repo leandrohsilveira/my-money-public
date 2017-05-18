@@ -11,6 +11,7 @@ export const BILLING_CYCLE = {
     CREATED: 'BILLING_CYCLE.CREATED',
     UPDATED: 'BILLING_CYCLE.UPDATED',
     DELETED: 'BILLING_CYCLE.DELETED',
+    RETRIEVED: 'BILLING_CYCLE.RETRIEVED',
     FETCHED: 'BILLING_CYCLE.FETCHED',
     FETCH_FAILED: 'BILLING_CYCLE.FETCH_FAILED'
 }
@@ -101,6 +102,23 @@ export const fetchBillingCycles = (page, limit) => {
         return doBillingCycleFetch(dispatch, false, page, limit)
     }
 }
+
+export const retrieveBillingCycle = (id) => {
+    return dispatch => {
+        return axios.get(api(`billing-cycles/${id}`))
+                    .then(resp => dispatch([
+                        {type: BILLING_CYCLE.RETRIEVED},
+                        initializeForm(resp.data)
+                    ]));
+    }
+
+    return [
+        changeTabsVisibility({edit: true}),
+        changeTab(2),
+        initializeForm(billingCycle)
+    ]
+}
+
 
 export const editBillingCycle = (billingCycle) => {
     return [
