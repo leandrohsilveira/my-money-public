@@ -19,43 +19,43 @@ import Summary from '../widgets/summary.component'
 const saveIcon = <i className="mi mi-save" />
 const cancelIcon = <i className="mi mi-close" />
 
-class BillingCycleForm extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            selectedCredits: [],
-            selectedDebts: []
-        }
+const selector = formValueSelector(BILLING_CYCLE_FORM.NAME)
+const mapStateToProps = state => ({
+    credits: selector(state, 'credits'), 
+    debts: selector(state, 'debts')
+})
+const mapDispatchToProps = dispatch => bindActionCreators({
+    formPush: arrayPush, 
+    formRemove: arrayRemove
+}, dispatch)
 
-        this.handleCreditSelect = this.handleCreditSelect.bind(this)
-        this.handleAddCredit = this.handleAddCredit.bind(this)
-        this.handleDuplicateCredit = this.handleDuplicateCredit.bind(this)
-        this.handleDeleteCredit = this.handleDeleteCredit.bind(this)
+@reduxForm({form: BILLING_CYCLE_FORM.NAME, destroyOnUnmount: false})
+@connect(mapStateToProps, mapDispatchToProps)
+export default class BillingCycleForm extends Component {
 
-        this.handleDebtSelect = this.handleDebtSelect.bind(this)
-        this.handleAddDebt = this.handleAddDebt.bind(this)
-        this.handleDuplicateDebt = this.handleDuplicateDebt.bind(this)
-        this.handleDeleteDebt = this.handleDeleteDebt.bind(this)
+    state = {
+        selectedCredits: [],
+        selectedDebts: []
     }
 
-    handleCreditSelect(selected) {
+    handleCreditSelect = (selected) => {
         this.setState({selectedCredits: selected.sort((a, b) => b - a).filter(item => typeof item === 'number')})
 
     }
-    handleDebtSelect(selected) {
+    handleDebtSelect = (selected) => {
         this.setState({selectedDebts: selected.sort((a, b) => b - a).filter(item => typeof item === 'number')})
  
    }
-    handleAddCredit() {
+    handleAddCredit = () => {
         this.props.formPush(BILLING_CYCLE_FORM.NAME, 'credits', {})
     }
 
-    handleAddDebt() {
+    handleAddDebt = () => {
         this.props.formPush(BILLING_CYCLE_FORM.NAME, 'debts', {})
     }
 
-    handleDuplicateCredit() {
+    handleDuplicateCredit = () => {
         if(this.state.selectedCredits.length) {
             this.state.selectedCredits.forEach(index => {
                 const credit = this.props.credits[index]
@@ -64,7 +64,7 @@ class BillingCycleForm extends Component {
         }
     }
 
-    handleDuplicateDebt() {
+    handleDuplicateDebt = () => {
         if(this.state.selectedDebts.length) {
             this.state.selectedDebts.forEach(index => {
                 const debt = this.props.debts[index]
@@ -73,7 +73,7 @@ class BillingCycleForm extends Component {
         }
     }
 
-    handleDeleteCredit() {
+    handleDeleteCredit = () => {
         if(this.state.selectedCredits.length) {
             this.state.selectedCredits.forEach(index => {
                 this.props.formRemove(BILLING_CYCLE_FORM.NAME, 'credits', index)
@@ -82,7 +82,7 @@ class BillingCycleForm extends Component {
         }
     }
 
-    handleDeleteDebt() {
+    handleDeleteDebt = () => {
         if(this.state.selectedDebts.length) {
             this.state.selectedDebts.forEach(index => {
                 this.props.formRemove(BILLING_CYCLE_FORM.NAME, 'debts', index)
@@ -91,7 +91,7 @@ class BillingCycleForm extends Component {
         }
     }
 
-    render() {
+    render = () => {
         
         return (
             <form role="form" onSubmit={this.props.handleSubmit}>
@@ -172,11 +172,3 @@ class BillingCycleForm extends Component {
     }
 
 }
-
-const selector = formValueSelector(BILLING_CYCLE_FORM.NAME)
-const mapStateToProps = state => ({credits: selector(state, 'credits'), debts: selector(state, 'debts')})
-const mapDispatchToProps = dispatch => bindActionCreators({formPush: arrayPush, formRemove: arrayRemove}, dispatch)
-
-BillingCycleForm = reduxForm({form: BILLING_CYCLE_FORM.NAME, destroyOnUnmount: false})(BillingCycleForm)
-BillingCycleForm = connect(mapStateToProps, mapDispatchToProps)(BillingCycleForm)
-export default BillingCycleForm

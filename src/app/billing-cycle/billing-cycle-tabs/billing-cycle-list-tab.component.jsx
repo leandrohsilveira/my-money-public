@@ -11,32 +11,25 @@ const loadMoreIcon = <i className="mi mi-expand-more" />
 
 export default class BillingCycleListTab extends Component {
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            selected: []
-        }
-
-        this.handleSelect = this.handleSelect.bind(this)
-        this.handleEdit = this.handleEdit.bind(this)
-        this.handleDelete = this.handleDelete.bind(this)
+    state = {
+        selected: []
     }
 
-    handleEdit() {
+    handleEdit = () => {
         if(this.state.selected.length && typeof this.props.onEdit === 'function') {
             const billingCycle = this.props.billingCycles[this.state.selected[0]]
             this.props.onEdit(billingCycle)
         }
     }
 
-    handleDelete() {
+    handleDelete = () => {
         if(this.state.selected.length && typeof this.props.onDelete === 'function') {
             const billingCycle = this.props.billingCycles[this.state.selected[0]]
             this.props.onDelete(billingCycle)
         }
     }
 
-    handleSelect(selected) {
+    handleSelect = (selected) => {
         this.setState({selected: selected})
     }
 

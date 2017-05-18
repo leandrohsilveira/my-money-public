@@ -28,16 +28,32 @@ const ICON_TAB_CREATE = <i className="mi mi-add" />
 const ICON_TAB_EDIT = <i className="mi mi-edit" />
 const ICON_TAB_DELETE = <i className="mi mi-delete" />
 
-class BillingCycleTabs extends Component {
+const mapStateToProps = state => ({
+    tab: state.billingCycle.tab,
+    billingCycles: state.billingCycle.billingCycles, 
+    page: state.billingCycle.page,
+    allBillingCyclesLoaded: state.billingCycle.allBillingCyclesLoaded,
+    errorResp: state.billingCycle.errorResp,
+    tabsVisibility: state.billingCycle.tabsVisibility
+})
+const mapDispatchToProps = dispatch => bindActionCreators({
+    changeTitle, 
+    changeTab, 
+    changeTabsVisibility, 
+    fetchBillingCycles, 
+    createBillingCycle,
+    updateBillingCycle,
+    submitDeleteBillingCycle,
+    editBillingCycle,
+    deleteBillingCycle,
+    resetForm,
+    initializeForm
+}, dispatch)
 
-    constructor(props) {
-        super(props)
-        this.handleNextBillingCyclesPage = this.handleNextBillingCyclesPage.bind(this)
-        this.handleFormCancel = this.handleFormCancel.bind(this)
-        this.handleFormReset = this.handleFormReset.bind(this)
-    }
+@connect(mapStateToProps, mapDispatchToProps)
+export default class BillingCycleTabs extends Component {
 
-    componentWillMount() {
+    componentWillMount = () => {
         this.props.changeTitle("Billing cycles")
         this.props.changeTab(0)
         this.props.changeTabsVisibility({list: true, create: true})
@@ -45,24 +61,24 @@ class BillingCycleTabs extends Component {
         this.handleNextBillingCyclesPage()
     }
 
-    handleNextBillingCyclesPage() {
+    handleNextBillingCyclesPage = () => {
         if(!this.props.allBillingCyclesLoaded) {
             console.debug('handleNextBillingCyclesPage(), this.props.page:', this.props.page + 1)
             this.props.fetchBillingCycles(this.props.page + 1);
         }
     }
 
-    handleFormReset() {
+    handleFormReset = () => {
         this.props.resetForm()
     }
 
-    handleFormCancel() {
+    handleFormCancel = () => {
         this.props.changeTab(0)
         this.props.changeTabsVisibility({list: true, create: true})
         this.props.initializeForm()
     }
 
-    processResponseError(resp) {
+    processResponseError = (resp) => {
         if(resp == "Error: Network Error") {
             return {message: "The data service is temporarily unavailable", duration: null}
         }
@@ -92,27 +108,3 @@ class BillingCycleTabs extends Component {
     }
 
 }
-
-const mapStateToProps = state => ({
-    tab: state.billingCycle.tab,
-    billingCycles: state.billingCycle.billingCycles, 
-    page: state.billingCycle.page,
-    allBillingCyclesLoaded: state.billingCycle.allBillingCyclesLoaded,
-    errorResp: state.billingCycle.errorResp,
-    tabsVisibility: state.billingCycle.tabsVisibility
-})
-const mapDispatchToProps = dispatch => bindActionCreators({
-    changeTitle, 
-    changeTab, 
-    changeTabsVisibility, 
-    fetchBillingCycles, 
-    createBillingCycle,
-    updateBillingCycle,
-    submitDeleteBillingCycle,
-    editBillingCycle,
-    deleteBillingCycle,
-    resetForm,
-    initializeForm
-}, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(BillingCycleTabs);

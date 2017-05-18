@@ -11,20 +11,19 @@ import theme from '../../toolbox/theme'
 
 import {onSideBarToggle} from './layout.actions'
 
-const Layout = props => {
-    return (
+const mapStateToProps = state => ({title: state.layout.title, sideBarOpen: state.layout.sideBarOpen})
+const mapDispatchToProps = dispatch => bindActionCreators({onSideBarToggle: onSideBarToggle}, dispatch)
+
+@connect(mapStateToProps, mapDispatchToProps)
+export default class Layout extends Component {
+    render = () => (
         <ThemeProvider theme={theme}>
             <div>
-                <Header title={props.title} onSidebarOpen={props.onSideBarToggle}></Header>
-                <Sidebar open={props.sideBarOpen} onChange={props.onSideBarToggle} docked={false}></Sidebar>
-                {props.children}
+                <Header title={this.props.title} onSidebarOpen={this.props.onSideBarToggle}></Header>
+                <Sidebar open={this.props.sideBarOpen} onChange={this.props.onSideBarToggle} docked={false}></Sidebar>
+                {this.props.children}
                 <Messages />
             </div>
         </ThemeProvider>
     )
 }
-
-const mapStateToProps = state => ({title: state.layout.title, sideBarOpen: state.layout.sideBarOpen})
-const mapDispatchToProps = dispatch => bindActionCreators({onSideBarToggle: onSideBarToggle}, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(Layout)
