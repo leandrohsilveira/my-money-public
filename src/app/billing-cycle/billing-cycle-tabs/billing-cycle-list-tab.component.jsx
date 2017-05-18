@@ -18,6 +18,22 @@ export default class BillingCycleListTab extends Component {
         }
 
         this.handleSelect = this.handleSelect.bind(this)
+        this.handleEdit = this.handleEdit.bind(this)
+        this.handleDelete = this.handleDelete.bind(this)
+    }
+
+    handleEdit() {
+        if(this.state.selected.length && typeof this.props.onEdit === 'function') {
+            const billingCycle = this.props.billingCycles[this.state.selected[0]]
+            this.props.onEdit(billingCycle)
+        }
+    }
+
+    handleDelete() {
+        if(this.state.selected.length && typeof this.props.onDelete === 'function') {
+            const billingCycle = this.props.billingCycles[this.state.selected[0]]
+            this.props.onDelete(billingCycle)
+        }
     }
 
     handleSelect(selected) {
@@ -28,7 +44,7 @@ export default class BillingCycleListTab extends Component {
         return (
             <div className="content">
                 <div className="row center-xs">
-                    <div className="col-xs-12 col-sm-8 col-md-6">
+                    <div className="col-xs-12 col-sm-10">
                         <Card>
                             <CardText className="start-xs">
                                 <BillingCycleList billingCycles={this.props.billingCycles} selected={this.state.selected} onSelect={this.handleSelect} />
@@ -40,6 +56,9 @@ export default class BillingCycleListTab extends Component {
                                         primary={true} 
                                         icon={loadMoreIcon} 
                                         label="Load more" />
+                                
+                                <Button flat disabled={!this.state.selected.length} label="Edit" onClick={this.handleEdit} />
+                                <Button flat disabled={!this.state.selected.length} label="Delete" onClick={this.handleDelete} />
                             </CardActions>
                         </Card>
                     </div>

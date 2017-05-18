@@ -18,7 +18,8 @@ export const BILLING_CYCLE = {
 export const BILLING_CYCLE_FORM = {
     NAME: 'billingCycleForm',
     INITIAL_VALUE: {
-        credits: [{}]
+        credits: [{}],
+        debts: [{}]
     }
 }
 

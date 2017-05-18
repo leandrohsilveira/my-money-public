@@ -9,10 +9,10 @@ import multi from 'redux-multi'
 import thunk from 'redux-thunk'
 
 import appReducer from './app.reducer'
-import Layout from './layout/layout.container'
 
 import {HashRouter} from 'react-router-dom'
 import AppRoutes from './app.routes'
+
 
 export default props => {
 
@@ -22,11 +22,9 @@ export default props => {
 
     return (
         <Provider store={store}>
-            <Layout>
-                <HashRouter>
-                    <AppRoutes />
-                </HashRouter>
-            </Layout>
+            <HashRouter>
+                <AppRoutes />
+            </HashRouter>
         </Provider>
     )
 }
