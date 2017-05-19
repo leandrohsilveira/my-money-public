@@ -19,21 +19,25 @@ const statusOptions = [
 export default props => (
     <Table selectable={props.selectable} multiSelectable={true} onRowSelect={props.onMovementSelect}>
         <TableHead>
-            <TableCell colSpan="2">Movements</TableCell>
+            <TableCell>Movements</TableCell>
         </TableHead>
         {(props.movements || []).map((movement, index) => (
             <TableRow key={index} selected={(props.selected || []).indexOf(index) !== -1}>
                 <TableCell>
-                    <ReduxField name={`${props.field}[${index}].name`} component={Input} type="text" label="Name" disabled={props.readOnly} />
+                    <div className="row">
+                        <div className={`col-xs-12 col-sm-${(props.showStatus ? '6' : '8')}`}>
+                            <ReduxField name={`${props.field}[${index}].name`} component={Input} type="text" label="Name" disabled={props.readOnly} />
+                        </div>
+                        <div className={`col-xs-12 col-sm-${(props.showStatus ? '3' : '4')}`}>
+                            <ReduxField name={`${props.field}[${index}].value`} component={Input} type="number" label="Value" disabled={props.readOnly} />
+                        </div>
+                        { props.showStatus && (
+                            <div className='col-xs-12 col-sm-3'>
+                                <ReduxField name={`${props.field}[${index}].status`} component={Select} label="Status" options={statusOptions} />
+                            </div>
+                        )}
+                    </div>
                 </TableCell>
-                <TableCell>
-                    <ReduxField name={`${props.field}[${index}].value`} component={Input} type="number" label="Value" disabled={props.readOnly} />
-                </TableCell>
-                { props.showStatus ? (
-                    <TableCell>
-                        <ReduxField name={`${props.field}[${index}].status`} component={Select} label="Status" options={statusOptions} />
-                    </TableCell>
-                ) : false }
             </TableRow>
         ))}
     </Table>

@@ -11,6 +11,9 @@ import CardTitle from 'react-toolbox/lib/card/CardTitle'
 import CardText from 'react-toolbox/lib/card/CardText'
 import CardActions from 'react-toolbox/lib/card/CardActions'
 
+import Tabs from 'react-toolbox/lib/tabs/Tabs'
+import Tab from 'react-toolbox/lib/tabs/Tab'
+
 import {BILLING_CYCLE_FORM} from './billing-cycle.actions'
 import Input from '../widgets/input.component'
 import MovementForm from '../credits/movement-form.component'
@@ -37,7 +40,12 @@ export default class BillingCycleForm extends Component {
 
     state = {
         selectedCredits: [],
-        selectedDebts: []
+        selectedDebts: [],
+        selectedTab: 0
+    }
+
+    handleTabChange = (tab) => {
+        this.setState({selectedTab: tab})
     }
 
     handleReset = () => {
@@ -64,7 +72,7 @@ export default class BillingCycleForm extends Component {
         if(this.state.selectedCredits.length) {
             this.state.selectedCredits.forEach(index => {
                 const credit = this.props.credits[index]
-                this.props.formPush(BILLING_CYCLE_FORM.NAME, 'credits', credit)
+                this.props.formPush(BILLING_TabsCYCLE_FORM.NAME, 'credits', credit)
             })
         }
     }
@@ -98,78 +106,80 @@ export default class BillingCycleForm extends Component {
 
     render = () => (
         <form role="form" onSubmit={this.props.handleSubmit}>
-            <div className="row padding-top">
-                <div className="col-sm-12">
-                    <Summary currency="R$" 
-                                credits={+this.props.credits.reduce((sum, credit) => sum + (+credit.value || 0), 0)} 
-                                debts={+this.props.debts.reduce((sum, debt) => sum + (+debt.value || 0), 0)} />
-                </div>
-            </div>
-            <div className="row padding-top">
-                <div className="col-sm-12">
-                    <Card>
-                        <CardText>
-                            <div className="row">
-                                <div className="col-sm-12 col-md padding">
-                                    <ReduxField name="name" component={Input} className="col-sm-12 col-md padding" type="text" label="Name" disabled={this.props.readOnly} />
-                                </div>
-                                <div className="col-sm-12 col-md padding">
-                                    <ReduxField name="month" component={Input} className="col-sm-12 col-md padding" type="number" label="Month" disabled={this.props.readOnly} />
-                                </div>
-                                <div className="col-sm-12 col-md padding">
-                                    <ReduxField name="year" component={Input} className="col-sm-12 col-md padding" type="number" label="Year" disabled={this.props.readOnly} />
-                                </div>
-                            </div>
-                        </CardText>
-                        <CardActions>
-                            <Button type="submit" icon={this.props.submitIcon} raised flat label={this.props.submitText || 'Save'} primary={true} />
-                            <Button label="Cancel" icon="close" onClick={this.props.onCancel} />
+            <Tabs index={this.state.selectedTab} fixed onChange={this.handleTabChange}>
+                <Tab label="Summary" icon="attach_money">
+                    <div className="row padding-top">
+                        <div className="col-xs-6 col-sm-8 col-md-9">
+                            <ReduxField name="name" component={Input} type="text" label="Name" disabled={this.props.readOnly} />
+                        </div>
+                        <div className="col-xs-3 col-sm-2 col-md-1">
+                            <ReduxField name="month" component={Input} type="number" label="Month" disabled={this.props.readOnly} />
+                        </div>
+                        <div className="col-xs-3 col-sm-2 col-md-2">
+                            <ReduxField name="year" component={Input} type="number" label="Year" disabled={this.props.readOnly} />
+                        </div>
+                    </div>
+                    <div className="row padding-top">
+                        <div className="col-sm-12">
+                            <Summary currency="R$" 
+                                        credits={+this.props.credits.reduce((sum, credit) => sum + (+credit.value || 0), 0)} 
+                                        debts={+this.props.debts.reduce((sum, debt) => sum + (+debt.value || 0), 0)} />
+                        </div>
+                    </div>
+                    <div className="row end-xs padding-top">
+                        <div className="col-xs-12">
                             {!this.props.readOnly ? (
                                 <Button label="Reset" icon="undo" onClick={this.handleReset} />
                             ) : false }
-                        </CardActions>
-                    </Card>
-                </div>
-            </div>
-            <div className="row padding-top">
-                <div className="col-sm-12 col-md-6">
-                    <Card>
-                        <CardTitle title="Credits" />
-                        <CardText>
-                            <MovementForm readOnly={this.props.readOnly} 
-                                            selectable={!this.props.readOnly}
-                                            selected={this.state.selectedCredits} 
-                                            onMovementSelect={this.handleCreditSelect} 
-                                            field='credits'
-                                            movements={this.props.credits} />
-                        </CardText>
-                        <CardActions>
-                            <Button label="Add credit" onClick={this.handleAddCredit} flat raised inverse disabled={this.props.readOnly} />
-                            <Button label="Duplicate" onClick={this.handleDuplicateCredit} flat disabled={this.props.readOnly || !this.state.selectedCredits.length} />
-                            <Button label="Remove" onClick={this.handleDeleteCredit} flat disabled={this.props.readOnly || !this.state.selectedCredits.length} />
-                        </CardActions>
-                    </Card>
-                </div>
-                <div className="col-sm-12 col-md-6">
-                    <Card>
-                        <CardTitle title="Debts" />
-                        <CardText>
-                            <MovementForm readOnly={this.props.readOnly} 
-                                            selectable={!this.props.readOnly}
-                                            selected={this.state.selectedDebts} 
-                                            onMovementSelect={this.handleDebtSelect} 
-                                            field='debts'
-                                            showStatus={true}
-                                            movements={this.props.debts} />
-                        </CardText>
-                        <CardActions>
-                            <Button label="Add debt" onClick={this.handleAddDebt} flat raised inverse disabled={this.props.readOnly} />
-                            <Button label="Duplicate" onClick={this.handleDuplicateDebt} flat disabled={this.props.readOnly || !this.state.selectedDebts.length} />
-                            <Button label="Remove" onClick={this.handleDeleteDebt} flat disabled={this.props.readOnly || !this.state.selectedDebts.length || this.props.debts.length <= 1} />
-                        </CardActions>
-                    </Card>
-                </div>
-            </div>
+                            <Button label="Cancel" icon="close" onClick={this.props.onCancel} />
+                            <Button type="submit" icon={this.props.submitIcon} raised flat label={this.props.submitText || 'Save'} primary={true} />
+                        </div>
+                    </div>
+                </Tab>
+                <Tab label="Credits" icon="account_balance">
+                    <div className="row padding-top">
+                        <div className="col-sm-12">
+                            <Card>
+                                <CardText>
+                                    <MovementForm readOnly={this.props.readOnly} 
+                                                    selectable={!this.props.readOnly}
+                                                    selected={this.state.selectedCredits} 
+                                                    onMovementSelect={this.handleCreditSelect} 
+                                                    field='credits'
+                                                    movements={this.props.credits} />
+                                </CardText>
+                                <CardActions>
+                                    <Button label="Duplicate" onClick={this.handleDuplicateCredit} flat disabled={this.props.readOnly || !this.state.selectedCredits.length} />
+                                    <Button label="Remove" onClick={this.handleDeleteCredit} flat disabled={this.props.readOnly || !this.state.selectedCredits.length} />
+                                </CardActions>
+                            </Card>
+                            <Button floating accent icon="add" className="floating bottom right" onClick={this.handleAddCredit} disabled={this.props.readOnly} />
+                        </div>
+                    </div>
+                </Tab>
+                <Tab label="Debts" icon="credit_card">
+                    <div className="row padding-top">
+                        <div className="col-sm-12">
+                            <Card>
+                                <CardText>
+                                    <MovementForm readOnly={this.props.readOnly} 
+                                                    selectable={!this.props.readOnly}
+                                                    selected={this.state.selectedDebts} 
+                                                    onMovementSelect={this.handleDebtSelect} 
+                                                    field='debts'
+                                                    showStatus={true}
+                                                    movements={this.props.debts} />
+                                </CardText>
+                                <CardActions>
+                                    <Button label="Duplicate" onClick={this.handleDuplicateDebt} flat disabled={this.props.readOnly || !this.state.selectedDebts.length} />
+                                    <Button label="Remove" onClick={this.handleDeleteDebt} flat disabled={this.props.readOnly || !this.state.selectedDebts.length || this.props.debts.length <= 1} />
+                                </CardActions>
+                            </Card>
+                            <Button floating accent icon="add" className="floating bottom right" onClick={this.handleAddDebt} disabled={this.props.readOnly} />
+                        </div>
+                    </div>
+                </Tab>
+            </Tabs>
         </form>
     )
 

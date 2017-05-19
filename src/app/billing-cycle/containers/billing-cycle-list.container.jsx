@@ -68,13 +68,13 @@ export default class BillingCycleListContainer extends Component {
     render = () => (
         <div className="content">
             <div className="row center-xs">
-                <div className="col-xs-12 col-sm-10">
+                <div className="col-xs-12">
                     <Card>
-                        <CardText className="start-xs">
+                        <CardText className="start-xs" style={{overflowX:'auto'}}>
                             <BillingCycleList billingCycles={this.props.billingCycles} selected={this.state.selected} onSelect={this.handleSelect} />
                         </CardText>
                         <CardActions>
-                            <Button raised flat
+                            <Button flat
                                     disabled={this.props.allBillingCyclesLoaded} 
                                     onClick={this.handleNextBillingCyclesPage}
                                     primary={true} 
@@ -86,8 +86,8 @@ export default class BillingCycleListContainer extends Component {
                         </CardActions>
                     </Card>
                 </div>
+                <Button icon='add' className="floating bottom right" floating accent onClick={this.handleCreate} />
             </div>
-            <Button icon='add' floating accent style={{position: 'fixed', right: 50, bottom: 50}} onClick={this.handleCreate} />
         </div>
     )
 

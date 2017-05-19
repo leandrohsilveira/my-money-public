@@ -111,12 +111,6 @@ export const retrieveBillingCycle = (id) => {
                         initializeForm(resp.data)
                     ]));
     }
-
-    return [
-        changeTabsVisibility({edit: true}),
-        changeTab(2),
-        initializeForm(billingCycle)
-    ]
 }
 
 
