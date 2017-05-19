@@ -120,7 +120,7 @@ export default class BillingCycleForm extends Component {
                         </div>
                     </div>
                     <div className="row padding-top">
-                        <div className="col-sm-12">
+                        <div className="col-xs-12">
                             <Summary currency="R$" 
                                         credits={+this.props.credits.reduce((sum, credit) => sum + (+credit.value || 0), 0)} 
                                         debts={+this.props.debts.reduce((sum, debt) => sum + (+debt.value || 0), 0)} />
@@ -138,7 +138,7 @@ export default class BillingCycleForm extends Component {
                 </Tab>
                 <Tab label="Credits" icon="account_balance">
                     <div className="row padding-top">
-                        <div className="col-sm-12">
+                        <div className="col-xs-12">
                             <Card>
                                 <CardText>
                                     <MovementForm readOnly={this.props.readOnly} 
@@ -159,7 +159,7 @@ export default class BillingCycleForm extends Component {
                 </Tab>
                 <Tab label="Debts" icon="credit_card">
                     <div className="row padding-top">
-                        <div className="col-sm-12">
+                        <div className="col-xs-12">
                             <Card>
                                 <CardText>
                                     <MovementForm readOnly={this.props.readOnly} 

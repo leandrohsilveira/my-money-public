@@ -13,8 +13,8 @@ export default props => (
             <i className="material-icons">monetization_on</i>
             <span>My Money</span>
         </AppBar>
-        <NavMenuItem href="/dashboard" onClick={props.onChange} iconClass="home" value="Dashboard"></NavMenuItem>
-        <NavMenuItem href="/billing-cycles" onClick={props.onChange} iconClass="library_add" value="Billing cycles"></NavMenuItem>
+        <NavMenuItem href="/dashboard" onClick={props.onNavigate} iconClass="home" value="Dashboard"></NavMenuItem>
+        <NavMenuItem href="/billing-cycles" onClick={props.onNavigate} iconClass="library_add" value="Billing cycles"></NavMenuItem>
         <MenuDivider />
     </div>
 )

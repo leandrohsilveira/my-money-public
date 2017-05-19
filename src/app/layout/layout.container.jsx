@@ -25,7 +25,7 @@ export default class AppLayout extends Component {
         <ThemeProvider theme={theme}>
             <Layout>
                 <NavDrawer active={this.props.sideBarOpen} onOverlayClick={this.props.onSideBarToggle} permanentAt="lg">
-                    <Sidebar />
+                    <Sidebar onNavigate={this.props.onSideBarToggle} />
                 </NavDrawer>
                 <Panel>
                     <AppBar className="app-title">
