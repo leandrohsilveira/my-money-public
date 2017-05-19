@@ -34,7 +34,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     formReset: resetForm
 }, dispatch)
 
-@reduxForm({form: BILLING_CYCLE_FORM.NAME, destroyOnUnmount: false})
+@reduxForm({form: BILLING_CYCLE_FORM.NAME})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class BillingCycleForm extends Component {
 
