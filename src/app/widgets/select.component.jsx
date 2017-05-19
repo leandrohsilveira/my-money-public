@@ -2,10 +2,12 @@ import React from 'react'
 
 import Dropdown from 'react-toolbox/lib/dropdown/Dropdown'
 
-export default props => (
+export default ({input,required,options,label,allowBlank, meta: {touched,error}}) => (
     <Dropdown auto 
-                {...props.input} 
-                source={props.options} 
-                label={props.label} 
-                allowBlank={props.allowBlank} />
+                {...input} 
+                required={required}
+                source={options} 
+                label={label} 
+                allowBlank={allowBlank}
+                error={touched ? error : null} />
 )

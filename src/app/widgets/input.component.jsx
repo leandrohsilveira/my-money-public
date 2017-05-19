@@ -2,8 +2,8 @@ import React from 'react'
 
 import Input from 'react-toolbox/lib/input';
 
-export default props => {
+export default ({input, className, label, disabled, required, meta: {touched, error}}) => {
     return (
-        <Input className={props.className} label={props.label} disabled={props.disabled} {...props.input}></Input>
+        <Input required={required} className={className} error={touched ? error : null} label={label} disabled={disabled} {...input}></Input>
     )
 }

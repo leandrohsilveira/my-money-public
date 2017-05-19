@@ -6,8 +6,6 @@ import {reset as resetReduxForm, initialize as initializeReduxForm} from 'redux-
 import {api} from '../configs'
 
 export const BILLING_CYCLE = {
-    TAB_CHANGED: 'BILLING_CYCLE.TAB_CHANGED',
-    TABS_VISIBILITY_CHANGE: 'BILLING_CYCLE.TABS_VISIBILITY_CHANGE',
     CREATED: 'BILLING_CYCLE.CREATED',
     UPDATED: 'BILLING_CYCLE.UPDATED',
     DELETED: 'BILLING_CYCLE.DELETED',
@@ -24,51 +22,32 @@ export const BILLING_CYCLE_FORM = {
     }
 }
 
-export const changeTab = (tab) => ({
-    type: BILLING_CYCLE.TAB_CHANGED,
-    payload: tab
-})
-
-export const changeTabsVisibility = (tabs) => ({
-    type: BILLING_CYCLE.TABS_VISIBILITY_CHANGE,
-    payload: tabs
-})
-
-export const createBillingCycle = (values) => {
-
+export const createBillingCycle = (values, callback) => {
     return dispatch => {
         axios.post(api('billing-cycles'), values)
+                .then(callback)
                 .then(resp => dispatch({
                     type: BILLING_CYCLE.CREATED
                 }))
                 .then(resp => {
                     toastr.success('Success', 'Billing cycle successfully registered')
-                    return dispatch([
-                        initializeForm(),
-                        doBillingCycleFetch(dispatch, true),
-                        changeTab(0)
-                    ]);
+                    return dispatch(doBillingCycleFetch(dispatch, true));
                 })
                 .catch(e => handleResponseError(e))
 
     }
 }
 
-export const updateBillingCycle = (values) => {
-
+export const updateBillingCycle = (values, callback) => {
     return dispatch => {
         axios.put(api(`billing-cycles/${values._id}`), values)
+                .then(callback)
                 .then(resp => dispatch({
                     type: BILLING_CYCLE.UPDATED
                 }))
                 .then(resp => {
                     toastr.success('Success', 'Billing cycle successfully updated')
-                    return dispatch([
-                        initializeForm(),
-                        doBillingCycleFetch(dispatch, true),
-                        changeTabsVisibility({list: true, create: true}),
-                        changeTab(0)
-                    ]);
+                    return dispatch(doBillingCycleFetch(dispatch, true));
                 })
                 .catch(e => handleResponseError(e))
 
@@ -76,21 +55,17 @@ export const updateBillingCycle = (values) => {
 }
 
 
-export const submitDeleteBillingCycle = (values) => {
+export const deleteBillingCycle = (values, callback) => {
 
     return dispatch => {
         axios.delete(api(`billing-cycles/${values._id}`))
+                .then(callback)
                 .then(resp => dispatch({
                     type: BILLING_CYCLE.DELETED
                 }))
                 .then(resp => {
                     toastr.success('Success', 'Billing cycle successfully deleted')
-                    return dispatch([
-                        initializeForm(),
-                        doBillingCycleFetch(dispatch, true),
-                        changeTabsVisibility({list: true, create: true}),
-                        changeTab(0)
-                    ]);
+                    return dispatch(doBillingCycleFetch(dispatch, true));
                 })
                 .catch(e => handleResponseError(e))
 
@@ -113,30 +88,13 @@ export const retrieveBillingCycle = (id) => {
     }
 }
 
-
-export const editBillingCycle = (billingCycle) => {
-    return [
-        changeTabsVisibility({edit: true}),
-        changeTab(2),
-        initializeForm(billingCycle)
-    ]
-}
-
-export const deleteBillingCycle = (billingCycle) => {
-    return [
-        changeTabsVisibility({'delete': true}),
-        changeTab(3),
-        initializeForm(billingCycle)
-    ]
-}
-
 export const initializeForm = (values = BILLING_CYCLE_FORM.INITIAL_VALUE) => initializeReduxForm(BILLING_CYCLE_FORM.NAME, values)
 
 export const resetForm = () => resetReduxForm(BILLING_CYCLE_FORM.NAME)
 
 function handleResponseError(e) {
+    console.log(e.response || e)
     const title = e.response.data.message
-    console.log(e.response)
     switch(e.response.status) {
         case 400:
             Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message.replace('Path', 'Field')))

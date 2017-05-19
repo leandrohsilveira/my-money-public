@@ -9,7 +9,7 @@ import {changeTitle} from '../../layout/layout.actions'
 import {
     createBillingCycle, 
     updateBillingCycle,
-    submitDeleteBillingCycle,
+    deleteBillingCycle,
     retrieveBillingCycle,
     initializeForm
 } from '../billing-cycle.actions'
@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     changeTitle,
     createBillingCycle,
     updateBillingCycle,
-    submitDeleteBillingCycle,
+    deleteBillingCycle,
     retrieveBillingCycle,
     initializeForm
 }, dispatch)
@@ -50,19 +50,28 @@ export default class BillingCycleFormContainer extends Component {
     }
 
     handleSubmit = (values) => {
+        const callback = (resp) => {
+            this.goBack()
+            return resp
+        }
+
         switch(this.props.type) {
             case 'UPDATE':
-                this.props.updateBillingCycle(values)
+                this.props.updateBillingCycle(values, callback)
                 break
             case 'DELETE':
-                this.props.submitDeleteBillingCycle(values)
+                this.props.deleteBillingCycle(values, callback)
                 break
             case 'CREATE': 
             default:
-                this.props.createBillingCycle(values)
+                this.props.createBillingCycle(values, callback)
                 break
         }
+
+
     }
+
+    goBack = () => this.props.history.push('/billing-cycles')
 
     render = () => (
         <div className="content">
@@ -71,7 +80,7 @@ export default class BillingCycleFormContainer extends Component {
                     <BillingCycleForm submitText={this.props.type} submitIcon={this.props.type === 'DELETE' ? 'delete' : 'check'}
                                                     readOnly={this.props.type == 'DELETE'} 
                                                     onSubmit={this.handleSubmit} 
-                                                    onCancel={() => this.props.history.push('/billing-cycles')} />
+                                                    onCancel={this.goBack} />
                 </div>
             </div>
         </div>
