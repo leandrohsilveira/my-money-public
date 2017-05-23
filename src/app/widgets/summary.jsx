@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ValueBox from './value-box.component'
+import ValueBox from './value-box'
 
 export default props => {
     

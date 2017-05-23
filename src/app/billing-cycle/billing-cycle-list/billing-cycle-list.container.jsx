@@ -11,7 +11,7 @@ import CardActions from 'react-toolbox/lib/card/CardActions'
 import {changeTitle} from '../../layout/layout.actions'
 import {fetchBillingCycles} from '../billing-cycle.actions'
 
-import BillingCycleList from '../billing-cycle-list.component'
+import BillingCycleList from './billing-cycle-list'
 
 const mapStateToProps = state => ({
     billingCycles: state.billingCycle.billingCycles, 

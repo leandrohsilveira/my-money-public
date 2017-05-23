@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 
-import BillingCycleForm from '../billing-cycle-form.component'
+import BillingCycleForm from './billing-cycle-form'
 
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'

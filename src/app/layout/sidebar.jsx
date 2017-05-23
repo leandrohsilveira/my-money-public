@@ -5,7 +5,7 @@ import AppBar from 'react-toolbox/lib/app_bar/AppBar'
 import FontIcon from 'react-toolbox/lib/font_icon/FontIcon'
 import MenuDivider from 'react-toolbox/lib/menu/MenuDivider'
 
-import NavMenuItem from '../widgets/nav-menu-item.component'
+import NavMenuItem from '../widgets/nav-menu-item'
 
 export default props => (
     <div>

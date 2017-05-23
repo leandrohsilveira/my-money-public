@@ -15,11 +15,10 @@ import ProgressBar from 'react-toolbox/lib/progress_bar/ProgressBar'
 import Tabs from 'react-toolbox/lib/tabs/Tabs'
 import Tab from 'react-toolbox/lib/tabs/Tab'
 
-import {BILLING_CYCLE_FORM} from './billing-cycle.actions'
-import Input from '../widgets/input.component'
-import MovementForm from '../credits/movement-form.component'
-import Summary from '../widgets/summary.component'
-import billingCycleFormValidation from './billing-cycle-form.validator'
+import {BILLING_CYCLE_FORM} from '../billing-cycle.actions'
+import MovementForm from './movement-form'
+import Field from '../../widgets/field'
+import Summary from '../../widgets/summary'
 
 const saveIcon = <i className="mi mi-save" />
 const cancelIcon = <i className="mi mi-close" />
@@ -36,7 +35,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     formReset: resetForm
 }, dispatch)
 
-@reduxForm({form: BILLING_CYCLE_FORM.NAME, validate: billingCycleFormValidation})
+@reduxForm({form: BILLING_CYCLE_FORM.NAME})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class BillingCycleForm extends Component {
 
@@ -141,13 +140,13 @@ export default class BillingCycleForm extends Component {
                     <Tab label="Summary" icon="attach_money">
                         <div className="row padding-top">
                             <div className="col-xs-6 col-sm-8 col-md-9">
-                                <ReduxField name="name" component={Input} type="text" label="Name" required={true} disabled={readOnly} />
+                                <Field name="name" label="Name" type="text" disabled={readOnly} validators={{required: true}} />
                             </div>
                             <div className="col-xs-3 col-sm-2 col-md-1">
-                                <ReduxField name="month" component={Input} type="number" label="Month" required={true} disabled={readOnly} />
+                                <Field name="month" type="number" label="Month" validators={{required: true, number: {min: 1, max: 12, int: true}}} disabled={readOnly} />
                             </div>
                             <div className="col-xs-3 col-sm-2 col-md-2">
-                                <ReduxField name="year" component={Input} type="number" label="Year" required={true} disabled={readOnly} />
+                                <Field name="year" type="number" label="Year" validators={{required: true, number: {min: 1970, int: true}}} disabled={readOnly} />
                             </div>
                         </div>
                         <div className="row padding-top">
@@ -211,7 +210,7 @@ export default class BillingCycleForm extends Component {
                                     </CardText>
                                     {!readOnly && (
                                         <CardActions>
-                                            <Button label="Duplicate" onClick={handleDuplicateDebt} flat disabled={selectedDebts.length} />
+                                            <Button label="Duplicate" onClick={handleDuplicateDebt} flat disabled={!selectedDebts.length} />
                                             <Button label="Remove" onClick={handleDeleteDebt} flat disabled={!selectedDebts.length} />
                                         </CardActions>
                                     )}

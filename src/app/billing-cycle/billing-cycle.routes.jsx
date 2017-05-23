@@ -1,8 +1,8 @@
 import React from 'react'
 import {Route, Switch} from 'react-router-dom'
 
-import BillingCycleFormContainer from './containers/billing-cycle-form.container'
-import BillingCycleListContainer from './containers/billing-cycle-list.container'
+import BillingCycleFormContainer from './billing-cycle-form/billing-cycle-form.container'
+import BillingCycleListContainer from './billing-cycle-list/billing-cycle-list.container'
 
 export default props => (
     <div>

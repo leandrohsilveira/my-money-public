@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import {changeTitle} from '../layout/layout.actions'
 import {onSummaryLoad} from './dashboard.actions'
 
-import Summary from '../widgets/summary.component'
+import Summary from '../widgets/summary'
 // import ErrorMessage from '../widgets/error-message.component'
 
 const mapStateToProps = state => ({summary: state.dashboard.summary, errorResp: state.dashboard.errorResp})

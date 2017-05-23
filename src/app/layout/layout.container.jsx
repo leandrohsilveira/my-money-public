@@ -9,8 +9,8 @@ import Panel from 'react-toolbox/lib/layout/Panel'
 import AppBar from 'react-toolbox/lib/app_bar/AppBar'
 import IconButton from 'react-toolbox/lib/button/IconButton'
 
-import Sidebar from './sidebar.component'
-import Messages from '../widgets/messages.component'
+import Sidebar from './sidebar'
+import Messages from '../widgets/messages'
 import theme from '../../toolbox/theme'
 
 import {onSideBarToggle} from './layout.actions'
