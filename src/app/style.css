@@ -7,9 +7,12 @@ header.banner {
     font-size: 2.2em;
 }
 
-
 header.banner .material-icons {
     font-size: 2.1em;
+}
+
+.app-actions {
+    float: right;
 }
 
 .floating {

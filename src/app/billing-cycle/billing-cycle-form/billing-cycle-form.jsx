@@ -3,22 +3,19 @@ import React, { Component } from 'react'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
-import {reduxForm, Field as ReduxField, formValueSelector, arrayPush, arrayRemove, reset as resetForm} from 'redux-form'
+import {reduxForm, Field as ReduxField, formValueSelector, arrayPush, arrayRemove, reset as resetForm, submit as submitForm} from 'redux-form'
 
+import IconButton from 'react-toolbox/lib/button/IconButton'
 import Button from 'react-toolbox/lib/button/Button'
-import Card from 'react-toolbox/lib/card/Card'
-import CardTitle from 'react-toolbox/lib/card/CardTitle'
-import CardText from 'react-toolbox/lib/card/CardText'
-import CardActions from 'react-toolbox/lib/card/CardActions'
 import ProgressBar from 'react-toolbox/lib/progress_bar/ProgressBar'
-
 import Tabs from 'react-toolbox/lib/tabs/Tabs'
 import Tab from 'react-toolbox/lib/tabs/Tab'
 
+import {changeAppBarActions} from '../../layout/layout.actions'
 import {BILLING_CYCLE_FORM} from '../billing-cycle.actions'
-import MovementForm from './movement-form'
 import Field from '../../widgets/field'
 import Summary from '../../widgets/summary'
+import MovementFormTab from './movement-form-tab.container'
 
 const saveIcon = <i className="mi mi-save" />
 const cancelIcon = <i className="mi mi-close" />
@@ -32,17 +29,39 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
     formPush: arrayPush, 
     formRemove: arrayRemove,
-    formReset: resetForm
+    formReset: resetForm,
+    formSubmit: submitForm,
+    changeAppBarActions
 }, dispatch)
+
+@reduxForm({form: BILLING_CYCLE_FORM.NAME})
+export class BillingCycleFormActions extends Component {
+
+    render() {
+        const {submitIcon, invalid, onSubmit} = this.props
+        return (
+            <div className="app-actions">
+                <IconButton icon={submitIcon} onClick={onSubmit} inverse />
+            </div>
+        )
+    }
+}
 
 @reduxForm({form: BILLING_CYCLE_FORM.NAME})
 @connect(mapStateToProps, mapDispatchToProps)
 export default class BillingCycleForm extends Component {
 
     state = {
-        selectedCredits: [],
-        selectedDebts: [],
         selectedTab: 0
+    }
+
+    componentWillMount = () => {
+        const {submitIcon, formSubmit, changeAppBarActions} = this.props
+        changeAppBarActions(<BillingCycleFormActions submitIcon={submitIcon} onSubmit={() => formSubmit(BILLING_CYCLE_FORM.NAME)} />)
+    }
+
+    componentWillUnmount = () => {
+        this.props.changeAppBarActions(null)
     }
 
     handleTabChange = (tab) => {
@@ -53,56 +72,12 @@ export default class BillingCycleForm extends Component {
         this.props.formReset(BILLING_CYCLE_FORM.NAME)
     }
 
-    handleCreditSelect = (selected) => {
-        this.setState({selectedCredits: selected.sort((a, b) => b - a).filter(item => typeof item === 'number')})
-
-    }
-    handleDebtSelect = (selected) => {
-        this.setState({selectedDebts: selected.sort((a, b) => b - a).filter(item => typeof item === 'number')})
- 
-   }
-    handleAddCredit = () => {
-        this.props.formPush(BILLING_CYCLE_FORM.NAME, 'credits', {})
+    handleAddMovement = (field, value) => {
+        this.props.formPush(BILLING_CYCLE_FORM.NAME, field, value)
     }
 
-    handleAddDebt = () => {
-        this.props.formPush(BILLING_CYCLE_FORM.NAME, 'debts', {})
-    }
-
-    handleDuplicateCredit = () => {
-        if(this.state.selectedCredits.length) {
-            this.state.selectedCredits.forEach(index => {
-                const credit = this.props.credits[index]
-                this.props.formPush(BILLING_TabsCYCLE_FORM.NAME, 'credits', credit)
-            })
-        }
-    }
-
-    handleDuplicateDebt = () => {
-        if(this.state.selectedDebts.length) {
-            this.state.selectedDebts.forEach(index => {
-                const debt = this.props.debts[index]
-                this.props.formPush(BILLING_CYCLE_FORM.NAME, 'debts', debt)
-            })
-        }
-    }
-
-    handleDeleteCredit = () => {
-        if(this.state.selectedCredits.length) {
-            this.state.selectedCredits.forEach(index => {
-                this.props.formRemove(BILLING_CYCLE_FORM.NAME, 'credits', index)
-            })
-            this.setState({selectedCredits: []})
-        }
-    }
-
-    handleDeleteDebt = () => {
-        if(this.state.selectedDebts.length) {
-            this.state.selectedDebts.forEach(index => {
-                this.props.formRemove(BILLING_CYCLE_FORM.NAME, 'debts', index)
-            })
-            this.setState({selectedDebts: []})
-        }
+    handleDeleteMovement = (field, index) => {
+        this.props.formRemove(BILLING_CYCLE_FORM.NAME, field, index)
     }
 
     render = () => {
@@ -119,20 +94,12 @@ export default class BillingCycleForm extends Component {
                 submitting
             },
             state: {
-                selectedTab,
-                selectedCredits,
-                selectedDebts
+                selectedTab
             },
             handleTabChange,
             handleReset,
-            handleCreditSelect,
-            handleDebtSelect,
-            handleAddCredit,
-            handleAddDebt,
-            handleDuplicateCredit,
-            handleDuplicateDebt,
-            handleDeleteCredit,
-            handleDeleteDebt
+            handleAddMovement,
+            handleDeleteMovement
         } = this
         return (
             <form role="form" onSubmit={handleSubmit} noValidate>
@@ -173,52 +140,16 @@ export default class BillingCycleForm extends Component {
                         </div>
                     </Tab>
                     <Tab label="Credits" icon="account_balance">
-                        <div className="row padding-top">
-                            <div className="col-xs-12">
-                                <Card>
-                                    <CardText>
-                                        <MovementForm readOnly={readOnly} 
-                                                        selectable={!readOnly}
-                                                        selected={selectedCredits} 
-                                                        onMovementSelect={handleCreditSelect} 
-                                                        field='credits'
-                                                        movements={credits} />
-                                    </CardText>
-                                    {!readOnly && (
-                                        <CardActions>
-                                            <Button label="Duplicate" onClick={handleDuplicateCredit} flat disabled={!selectedCredits.length} />
-                                            <Button label="Remove" onClick={handleDeleteCredit} flat disabled={!selectedCredits.length} />
-                                        </CardActions>
-                                    )}
-                                </Card>
-                                <Button floating accent icon="add" className="floating bottom right" onClick={handleAddCredit} disabled={readOnly} />
-                            </div>
-                        </div>
+                        <MovementFormTab title="Credits" field="credits" movements={credits} 
+                                            readOnly={readOnly} showStatus={false} 
+                                            onAdd={handleAddMovement} onDelete={handleDeleteMovement} />
                     </Tab>
-                    <Tab label="Debts" icon="credit_card">
-                        <div className="row padding-top">
-                            <div className="col-xs-12">
-                                <Card>
-                                    <CardText>
-                                        <MovementForm readOnly={readOnly} 
-                                                        selectable={!readOnly}
-                                                        selected={selectedDebts} 
-                                                        onMovementSelect={handleDebtSelect} 
-                                                        field='debts'
-                                                        showStatus={true}
-                                                        movements={debts} />
-                                    </CardText>
-                                    {!readOnly && (
-                                        <CardActions>
-                                            <Button label="Duplicate" onClick={handleDuplicateDebt} flat disabled={!selectedDebts.length} />
-                                            <Button label="Remove" onClick={handleDeleteDebt} flat disabled={!selectedDebts.length} />
-                                        </CardActions>
-                                    )}
-                                </Card>
-                                <Button floating accent icon="add" className="floating bottom right" onClick={handleAddDebt} disabled={readOnly} />
-                            </div>
-                        </div>
+                    <Tab label="Credits" icon="credit_card">
+                        <MovementFormTab title="Debts" field="debts" movements={debts} 
+                                            readOnly={readOnly} showStatus={true} 
+                                            onAdd={handleAddMovement} onDelete={handleDeleteMovement} />
                     </Tab>
+
                 </Tabs>
             </form>
         )

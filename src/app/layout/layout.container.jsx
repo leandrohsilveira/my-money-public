@@ -16,28 +16,33 @@ import theme from '../../toolbox/theme'
 import {onSideBarToggle} from './layout.actions'
 import NavDrawer from 'react-toolbox/lib/layout/NavDrawer'
 
-const mapStateToProps = state => ({title: state.layout.title, sideBarOpen: state.layout.sideBarOpen})
+const mapStateToProps = state => ({title: state.layout.title, sideBarOpen: state.layout.sideBarOpen, appBarActions: state.layout.appBarActions})
 const mapDispatchToProps = dispatch => bindActionCreators({onSideBarToggle: onSideBarToggle}, dispatch)
 
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AppLayout extends Component {
-    render = () => (
-        <ThemeProvider theme={theme}>
-            <Layout>
-                <NavDrawer active={this.props.sideBarOpen} onOverlayClick={this.props.onSideBarToggle} permanentAt="lg">
-                    <Sidebar onNavigate={this.props.onSideBarToggle} />
-                </NavDrawer>
-                <Panel>
-                    <AppBar className="app-title">
-                        <IconButton icon="menu" inverse className="drawer-button" onClick={this.props.onSideBarToggle} />
-                        <h3>{this.props.title}</h3>
-                    </AppBar>
-                    <div>
-                        {this.props.children}
-                    </div>
-                </Panel>
-                <Messages />
-            </Layout>
-        </ThemeProvider>
-    )
+
+    render() {
+        const {sideBarOpen, onSideBarToggle, title, children, appBarActions} = this.props
+        return (
+            <ThemeProvider theme={theme}>
+                <Layout>
+                    <NavDrawer active={sideBarOpen} onOverlayClick={onSideBarToggle} permanentAt="lg">
+                        <Sidebar onNavigate={onSideBarToggle} />
+                    </NavDrawer>
+                    <Panel>
+                        <AppBar className="app-title">
+                            <IconButton icon="menu" inverse className="drawer-button" onClick={onSideBarToggle} />
+                            <h3>{title}</h3>
+                            {appBarActions}
+                        </AppBar>
+                        <div>
+                            {children}
+                        </div>
+                    </Panel>
+                    <Messages />
+                </Layout>
+            </ThemeProvider>
+        )
+    }
 }
