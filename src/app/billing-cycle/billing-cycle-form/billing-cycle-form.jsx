@@ -6,6 +6,8 @@ import {connect} from 'react-redux'
 import {reduxForm, Field as ReduxField, formValueSelector, arrayPush, arrayRemove, reset as resetForm, submit as submitForm} from 'redux-form'
 
 import IconButton from 'react-toolbox/lib/button/IconButton'
+import IconMenu from 'react-toolbox/lib/menu/IconMenu'
+import MenuItem from 'react-toolbox/lib/menu/MenuItem'
 import Button from 'react-toolbox/lib/button/Button'
 import ProgressBar from 'react-toolbox/lib/progress_bar/ProgressBar'
 import Tabs from 'react-toolbox/lib/tabs/Tabs'
@@ -38,10 +40,14 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export class BillingCycleFormActions extends Component {
 
     render() {
-        const {submitIcon, invalid, onSubmit} = this.props
+        const {submitIcon, submitText, invalid, readOnly, onSubmit, onReset, onCancel} = this.props
         return (
-            <div className="app-actions">
+            <div>
                 <IconButton icon={submitIcon} onClick={onSubmit} inverse />
+                <IconMenu icon="more_vert" position="topRight" menuRipple inverse>
+                    <MenuItem caption="Undo all changes" icon="undo" onClick={onReset} disabled={readOnly} />
+                    <MenuItem caption="Cancel" icon="close" onClick={onCancel} />
+                </IconMenu>
             </div>
         )
     }
@@ -55,9 +61,16 @@ export default class BillingCycleForm extends Component {
         selectedTab: 0
     }
 
-    componentWillMount = () => {
-        const {submitIcon, formSubmit, changeAppBarActions} = this.props
-        changeAppBarActions(<BillingCycleFormActions submitIcon={submitIcon} onSubmit={() => formSubmit(BILLING_CYCLE_FORM.NAME)} />)
+    componentDidMount = () => {
+        const {submitIcon, submitText, formSubmit, readOnly, onCancel, changeAppBarActions} = this.props
+        const appBarActions = (
+            <BillingCycleFormActions submitIcon={submitIcon} submitText={submitText}
+                                    readOnly={readOnly}
+                                    onReset={this.handleReset}
+                                    onCancel={onCancel}
+                                    onSubmit={() => formSubmit(BILLING_CYCLE_FORM.NAME)} />
+        )
+        changeAppBarActions(appBarActions)
     }
 
     componentWillUnmount = () => {
@@ -106,13 +119,13 @@ export default class BillingCycleForm extends Component {
                 <Tabs index={selectedTab} fixed hideMode="display" onChange={handleTabChange}>
                     <Tab label="Summary" icon="attach_money">
                         <div className="row padding-top">
-                            <div className="col-xs-6 col-sm-8 col-md-9">
+                            <div className="col-xs-12 col-sm-6 col-md-8">
                                 <Field name="name" label="Name" type="text" disabled={readOnly} validators={{required: true}} />
                             </div>
-                            <div className="col-xs-3 col-sm-2 col-md-1">
+                            <div className="col-xs-6 col-sm-3 col-md-2">
                                 <Field name="month" type="number" label="Month" validators={{required: true, number: {min: 1, max: 12, int: true}}} disabled={readOnly} />
                             </div>
-                            <div className="col-xs-3 col-sm-2 col-md-2">
+                            <div className="col-xs-6 col-sm-3 col-md-2">
                                 <Field name="year" type="number" label="Year" validators={{required: true, number: {min: 1970, int: true}}} disabled={readOnly} />
                             </div>
                         </div>
@@ -122,21 +135,6 @@ export default class BillingCycleForm extends Component {
                                             credits={+credits.reduce((sum, credit) => sum + (+credit.value || 0), 0)} 
                                             debts={+debts.reduce((sum, debt) => sum + (+debt.value || 0), 0)} />
                             </div>
-                        </div>
-                        <div className="row end-xs padding-top">
-                                {submitting ? (
-                                    <div className="col-xs-3">
-                                        <ProgressBar type='circular' mode='indeterminate' multicolor />
-                                    </div>
-                                ) : (
-                                    <div className="col-xs-12">
-                                        {!readOnly ? (
-                                            <Button label="Reset" icon="undo" onClick={handleReset} />
-                                        ) : false }
-                                        <Button label="Cancel" icon="close" onClick={onCancel} />
-                                        <Button type="submit" disabled={invalid} icon={submitIcon} raised flat label={submitText || 'Save'} primary={true} />
-                                    </div>
-                                )}
                         </div>
                     </Tab>
                     <Tab label="Credits" icon="account_balance">

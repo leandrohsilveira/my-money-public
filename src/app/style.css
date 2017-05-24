@@ -11,8 +11,23 @@ header.banner .material-icons {
     font-size: 2.1em;
 }
 
-.app-actions {
-    float: right;
+.app-bar-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+
+.app-bar-title {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+}
+.app-bar-actions {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
 }
 
 .floating {
@@ -23,6 +38,10 @@ section:focus {
     outline: none;
 }
 
+header.app-title {
+    padding: 0px 10px;
+}
+
 .app-title button.drawer-button {
     display: none;
 }
@@ -30,7 +49,9 @@ section:focus {
 @media(max-width: 1280px) {
 
     .app-title button.drawer-button {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        align-self: center;
     }
 
     .app-title button.drawer-button span.material-icons {

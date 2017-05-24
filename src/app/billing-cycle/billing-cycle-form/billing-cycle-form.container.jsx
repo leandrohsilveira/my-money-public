@@ -71,7 +71,7 @@ export default class BillingCycleFormContainer extends Component {
 
     }
 
-    goBack = () => this.props.history.push('/billing-cycles')
+    goBack = () => this.props.history.goBack()
 
     render = () => (
         <div className="content">

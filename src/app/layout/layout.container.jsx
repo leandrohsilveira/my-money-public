@@ -32,9 +32,17 @@ export default class AppLayout extends Component {
                     </NavDrawer>
                     <Panel>
                         <AppBar className="app-title">
-                            <IconButton icon="menu" inverse className="drawer-button" onClick={onSideBarToggle} />
-                            <h3>{title}</h3>
-                            {appBarActions}
+                            <div className="app-bar-container">
+                                <div className="app-bar-title">
+                                    <div className="app-bar-container">
+                                        <IconButton icon="menu" inverse className="drawer-button" onClick={onSideBarToggle} />
+                                        <h3>{title}</h3>
+                                    </div>
+                                </div>
+                                <div className="app-bar-actions">
+                                    {appBarActions}
+                                </div>
+                            </div>
                         </AppBar>
                         <div>
                             {children}

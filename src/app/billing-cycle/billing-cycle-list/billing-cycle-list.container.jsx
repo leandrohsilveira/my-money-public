@@ -4,11 +4,12 @@ import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
 import Button from 'react-toolbox/lib/button/Button'
+import IconButton from 'react-toolbox/lib/button/IconButton'
 import Card from 'react-toolbox/lib/card/Card'
 import CardText from 'react-toolbox/lib/card/CardText'
 import CardActions from 'react-toolbox/lib/card/CardActions'
 
-import {changeTitle} from '../../layout/layout.actions'
+import {changeTitle, changeAppBarActions} from '../../layout/layout.actions'
 import {fetchBillingCycles} from '../billing-cycle.actions'
 
 import BillingCycleList from './billing-cycle-list'
@@ -20,6 +21,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => bindActionCreators({
     changeTitle, 
+    changeAppBarActions,
     fetchBillingCycles
 }, dispatch)
 
@@ -34,6 +36,27 @@ export default class BillingCycleListContainer extends Component {
         this.props.changeTitle('Billing cycles list')
         if(!this.props.billingCycles.length) {
             this.handleNextBillingCyclesPage()
+        }
+    }
+
+    componentWillUnmount = () => {
+        if(this.state.selected.length) {
+            this.props.changeAppBarActions(null)
+        }
+    }
+
+    updateAppBarActions = (selected) => {
+        const selectedLength = selected.length
+        if(selectedLength) {
+            const {handleEdit, handleDelete} = this
+            this.props.changeAppBarActions((
+                <div>
+                    <IconButton icon="edit" onClick={handleEdit} inverse />
+                    <IconButton icon="delete" onClick={handleDelete} inverse />
+                </div>
+            ))
+        } else {
+            this.props.changeAppBarActions(null)
         }
     }
 
@@ -56,7 +79,11 @@ export default class BillingCycleListContainer extends Component {
     }
 
     handleSelect = (selected) => {
+        const oldSelectLength = this.state.selected.length
         this.setState({selected: selected})
+        if(!(oldSelectLength && selected.length) || (oldSelectLength && !selected.length)) {
+            this.updateAppBarActions(selected)
+        }
     }
 
     handleNextBillingCyclesPage = () => {
@@ -80,9 +107,6 @@ export default class BillingCycleListContainer extends Component {
                                     primary={true} 
                                     icon="expand_more"
                                     label="Load more" />
-                            
-                            <Button flat disabled={!this.state.selected.length} icon="edit" label="Edit" onClick={this.handleEdit} />
-                            <Button flat disabled={!this.state.selected.length} icon="delete" label="Delete" onClick={this.handleDelete} />
                         </CardActions>
                     </Card>
                 </div>
