@@ -4,11 +4,20 @@ body {
 
 header.banner {
     height: 200px;
-    font-size: 2.2em;
+    padding: 10px 10px;
 }
 
-header.banner .material-icons {
+header.banner .title {
+    font-size: 2.3em;
+}
+
+header.banner .title .material-icons {
     font-size: 2.1em;
+}
+
+header.banner .auth {
+    font-size: 0.8em;
+    padding-left: 3px;
 }
 
 .app-bar-container {
@@ -108,4 +117,45 @@ a.nav-menu-item:active,
 a.nav-menu-item:hover,
 a.nav-menu-item:visited {
     text-decoration: none;
+}
+
+
+/* ========================================================================== */
+
+/* FLEX GRID */
+
+/* ========================================================================== */
+
+.flex {
+    display: flex;
+}
+
+.flex-column {
+    flex-direction: column;
+    height: 100%;
+}
+
+.flex-row {
+    flex-direction: row;
+    width: 100%;
+}
+
+.flex-start {
+    justify-content: flex-start;
+}
+
+.flex-end {
+    justify-content: flex-end;
+}
+
+.flex-space-between {
+    justify-content: space-between;
+}
+
+.flex-center {
+    justify-content: center;
+}
+
+.flex-self-center {
+    align-self: center;
 }

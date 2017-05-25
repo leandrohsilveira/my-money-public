@@ -3,7 +3,7 @@ import axios from 'axios'
 import {toastr} from 'react-redux-toastr'
 import {reset as resetReduxForm, initialize as initializeReduxForm} from 'redux-form'
 
-import {api} from '../configs'
+import {api, handleResponseError} from '../configs'
 
 export const BILLING_CYCLE = {
     CREATED: 'BILLING_CYCLE.CREATED',
@@ -91,19 +91,6 @@ export const retrieveBillingCycle = (id) => {
 export const initializeForm = (values = BILLING_CYCLE_FORM.INITIAL_VALUE) => initializeReduxForm(BILLING_CYCLE_FORM.NAME, values)
 
 export const resetForm = () => resetReduxForm(BILLING_CYCLE_FORM.NAME)
-
-function handleResponseError(e) {
-    console.log(e.response || e)
-    const title = e.response.data.message
-    switch(e.response.status) {
-        case 400:
-            Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message.replace('Path', 'Field')))
-            break
-        default:
-            Object.keys(e.response.data.errors).forEach(key => toastr.error(title, e.response.data.errors[key].message))
-            break
-    }
-}
 
 function doBillingCycleFetch(dispatch, reset = false, page = 1, limit = 10) {
     const skip = page * limit - limit

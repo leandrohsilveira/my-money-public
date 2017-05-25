@@ -14,6 +14,10 @@ module.exports = {
             '/api': {
                 target: 'http://localhost:3003',
                 secure: false
+            },
+            '/oapi': {
+                target: 'http://localhost:3003',
+                secure: false
             }
         }
     },
