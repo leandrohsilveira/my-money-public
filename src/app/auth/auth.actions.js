@@ -5,7 +5,8 @@ import {openApi, handleResponseError} from '../configs'
 
 export const AUTH = {
     TOKEN_VALIDATED: 'AUTH.TOKEN_VALIDATED',
-    CURRENT_USER_FETCHED: 'AUTH.CURRENT_USER_FETCHED'
+    CURRENT_USER_FETCHED: 'AUTH.CURRENT_USER_FETCHED',
+    USER_SIGNED_UP: 'AUTH.USER_SIGNED_UP'
 }
 
 export const AUTH_FORM = {
@@ -30,7 +31,7 @@ export function signUp(values) {
             .then(resp => {
                 toastr.success('Success', 'Sign-up successful')
                 return dispatch([
-                    {type: AUTH.CURRENT_USER_FETCHED, payload: resp.data}
+                    {type: AUTH.USER_SIGNED_UP, payload: resp.data}
                 ])
             })
             .catch(e => handleResponseError(e))
