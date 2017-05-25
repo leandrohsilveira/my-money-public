@@ -59,7 +59,7 @@ export default class Sidebar extends Component {
                                         {/*<span className="flex-self-center auth">leandro.hinckel@gmail.com</span>*/}
                                     </div>
                                     <div className="flex flex-row flex-end flex-self-center">
-                                        <IconButton icon={showUserMenu ? 'arrow_drop_down' : 'arrow_drop_up'} inverse onClick={handleUserMenuClick} />
+                                        <IconButton icon={showUserMenu ? 'arrow_drop_up' : 'arrow_drop_down'} inverse onClick={handleUserMenuClick} />
                                     </div>
                                 </div>
                             )}
