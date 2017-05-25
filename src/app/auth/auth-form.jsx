@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { reduxForm, formValueSelector } from 'redux-form'
+import { reduxForm, formValueSelector, reset as resetForm } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -14,7 +14,7 @@ import Field from '../widgets/field'
 
 const selector = formValueSelector(AUTH_FORM.NAME)
 const mapStateToProps = state => ({password: selector(state, 'password')})
-const mapDispatchToProps = dispatch => bindActionCreators({ login, signUp, changeTitle }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ login, signUp, changeTitle, resetForm }, dispatch)
 
 @reduxForm({ form: AUTH_FORM.NAME })
 @connect(mapStateToProps, mapDispatchToProps)
@@ -30,15 +30,34 @@ export default class AuthForm extends Component {
     }
 
     changeMode = () => {
-        const {changeTitle} = this.props
+        const {changeTitle, resetForm} = this.props
+        resetForm(AUTH_FORM.NAME)
         this.setState({ loginMode: !this.state.loginMode })
         changeTitle(!this.state.loginMode ? "Sign-in" : "Register")
     }
 
     onSubmit = (values) => {
-        const { login, signUp } = this.props
+        const { handleSignIn, handleSignUp } = this
+        this.state.loginMode ? handleSignIn(values) : handleSignUp(values)
+    }
+
+    handleSignIn = (values) => {
+        const {login, onSignIn} = this.props
+        login(values)
+        if(typeof onSignIn === 'function') {
+            onSignIn(values)
+        }
+    }
+
+    handleSignUp = (values) => {
+        const { signUp, onSignUp } = this.props
         const { changeMode } = this
-        this.state.loginMode ? login(values) : (() => {signUp(values);changeMode()})()
+        signUp(values)
+        changeMode()
+        if(typeof onSignUp === 'function') {
+            onSignUp(values)
+        }
+
     }
 
     render() {

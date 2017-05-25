@@ -13,7 +13,9 @@ export default props => (
     <div>
         <Route path="/">
             <AppLayout>
-                <Route path="/login" component={AuthForm} />
+                <Route path="/login" render={({history}) => (
+                    <AuthForm onSignIn={() => history.push('/dashboard')} />
+                )} />
                 <Route path="/dashboard" render={props => (
                     <AccessControl>
                         <Dashboard {...props} />
