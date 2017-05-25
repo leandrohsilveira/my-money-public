@@ -8,6 +8,7 @@ import AppBar from 'react-toolbox/lib/app_bar/AppBar'
 import FontIcon from 'react-toolbox/lib/font_icon/FontIcon'
 import IconButton from 'react-toolbox/lib/button/IconButton'
 import MenuDivider from 'react-toolbox/lib/menu/MenuDivider'
+import MenuItem from 'react-toolbox/lib/menu/MenuItem'
 
 import NavMenuItem from '../widgets/nav-menu-item'
 
@@ -19,15 +20,25 @@ const mapDispatchToProps = dispatch => bindActionCreators({logout}, dispatch)
 @connect(mapStateToProps, mapDispatchToProps)
 export default class Sidebar extends Component {
 
+    state = {
+        showUserMenu: false
+    }
+
     handleLogout = () => {
         const {onNavigate, logout} = this.props
+        this.setState({showUserMenu: false})
         onNavigate()
         logout()
     }
 
+    handleUserMenuClick = () => {
+        this.setState({showUserMenu: !this.state.showUserMenu})
+    }
+
     render() {
         const {onNavigate, user} = this.props
-        const {handleLogout} = this
+        const {showUserMenu} = this.state
+        const {handleLogout, handleUserMenuClick} = this
         return (
             <div>
                 <AppBar className="banner" flat>
@@ -48,20 +59,23 @@ export default class Sidebar extends Component {
                                         {/*<span className="flex-self-center auth">leandro.hinckel@gmail.com</span>*/}
                                     </div>
                                     <div className="flex flex-row flex-end flex-self-center">
-                                        <IconButton icon="power_settings_new" inverse onClick={handleLogout} />
+                                        <IconButton icon={showUserMenu ? 'arrow_drop_down' : 'arrow_drop_up'} inverse onClick={handleUserMenuClick} />
                                     </div>
                                 </div>
                             )}
                         </div>
                     </div>
                 </AppBar>
+                {showUserMenu && [
+                    <MenuItem key="signOff" icon="power_settings_new" caption="Sign off" onClick={handleLogout} />,
+                    <MenuDivider key="divider1" />
+                ]}
                 {user ? [
-                    <NavMenuItem key={1} href="/dashboard" onClick={onNavigate} iconClass="home" value="Dashboard"></NavMenuItem>,
-                    <NavMenuItem key={2} href="/billing-cycles" onClick={onNavigate} iconClass="library_add" value="Billing cycles"></NavMenuItem>
+                    <NavMenuItem key="dashboard" href="/dashboard" onClick={onNavigate} iconClass="home" value="Dashboard"></NavMenuItem>,
+                    <NavMenuItem key="billingCycles" href="/billing-cycles" onClick={onNavigate} iconClass="library_add" value="Billing cycles"></NavMenuItem>
                 ] : (
                     <NavMenuItem href="/login" onClick={onNavigate} iconClass="power_settings_new" value="Sign in"></NavMenuItem>
                 )}
-                <MenuDivider />
             </div>
         )
     }
