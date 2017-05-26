@@ -7,20 +7,18 @@ import Dashboard from './dashboard/dashboard.container'
 // import BillingCycleTabs from './billing-cycle/billing-cycle-tabs/billing-cycle-tabs.container'
 import BillingCycleRoutes from './billing-cycle/billing-cycle.routes'
 import AccessControl from './access-control'
-import AuthForm from './auth/auth-form'
+import UserRoutes from './user/user.routes'
 
 export default props => (
     <div>
         <Route path="/">
             <AppLayout>
-                <Route path="/login" render={({history}) => (
-                    <AuthForm onSignIn={() => history.push('/dashboard')} />
-                )} />
                 <Route path="/dashboard" render={props => (
                     <AccessControl>
                         <Dashboard {...props} />
                     </AccessControl>
                 )} />
+                <UserRoutes />
                 <BillingCycleRoutes />
             </AppLayout>
         </Route>

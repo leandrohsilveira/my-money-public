@@ -13,7 +13,7 @@ export const AUTH_FORM = {
     NAME: 'authForm'
 }
 
-export function login(values) {
+export function login(values, callback) {
     return dispatch => {
         return axios.post(openApi('login'), values)
             .then(resp => {
@@ -21,11 +21,12 @@ export function login(values) {
                     {type: AUTH.CURRENT_USER_FETCHED, payload: resp.data}
                 ])
             })
+            .then(callback)
             .catch(e => handleResponseError(e))
     }
 }
 
-export function signUp(values) {
+export function signUp(values, callback) {
     return dispatch => {
         return axios.post(openApi('signup'), values)
             .then(resp => {
@@ -34,6 +35,7 @@ export function signUp(values) {
                     {type: AUTH.USER_SIGNED_UP, payload: resp.data}
                 ])
             })
+            .then(callback)
             .catch(e => handleResponseError(e))
     }
 }
@@ -45,7 +47,7 @@ export function logout() {
 export function validateToken(token) {
     return dispatch => {
         if(token) {
-            axios.post(openApi('/token', {token}))
+            axios.post(openApi('/token'), {token})
                 .then(resp => {
                     dispatch({type: AUTH.TOKEN_VALIDATED, payload: resp.data.valid})
                 })

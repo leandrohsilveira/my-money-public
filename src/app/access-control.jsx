@@ -4,8 +4,8 @@ import axios from 'axios'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
 
-import AuthForm from './auth/auth-form'
-import {validateToken} from './auth/auth.actions'
+import AuthForm from './user/auth-form'
+import {validateToken} from './user/auth.actions'
 
 const mapStateToProps = state => ({user: state.auth.user, validToken: state.auth.validToken})
 const mapDispatchToProps = dispatch => bindActionCreators({validateToken}, dispatch)
@@ -21,12 +21,17 @@ export default class AccessControl extends Component {
     }
 
     render() {
-        const {user, validToken, children} = this.props
-        if(user && validToken) {
+        const {user, validToken, secured = true, onUnsecureAccess, children} = this.props
+        if(secured && user && validToken) {
             axios.defaults.headers.common['authorization'] = user.token
             return children
-        } else if(!user && !validToken) {
+        } else if(secured && !user && !validToken) {
             return <AuthForm />
+        } else if (!secured) {
+            if(typeof onUnsecureAccess === 'function') {
+                onUnsecureAccess(user && validToken)
+            }
+            return children
         } else {
             return false
         }

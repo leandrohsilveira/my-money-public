@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { reduxForm, formValueSelector, reset as resetForm } from 'redux-form'
+import { reduxForm, formValueSelector } from 'redux-form'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 
@@ -9,61 +9,34 @@ import CardActions from 'react-toolbox/lib/card/CardActions'
 import Button from 'react-toolbox/lib/button/Button'
 
 import {changeTitle} from '../layout/layout.actions'
-import { login, signUp, AUTH_FORM } from './auth.actions'
+import { login, AUTH_FORM } from './auth.actions'
 import Field from '../widgets/field'
 
 const selector = formValueSelector(AUTH_FORM.NAME)
 const mapStateToProps = state => ({password: selector(state, 'password')})
-const mapDispatchToProps = dispatch => bindActionCreators({ login, signUp, changeTitle, resetForm }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ login, changeTitle }, dispatch)
 
 @reduxForm({ form: AUTH_FORM.NAME })
 @connect(mapStateToProps, mapDispatchToProps)
 export default class AuthForm extends Component {
-
-    state = {
-        loginMode: true
-    }
 
     componentWillMount = () => {
         const {changeTitle} = this.props
         changeTitle("Sign-in")
     }
 
-    changeMode = () => {
-        const {changeTitle, resetForm} = this.props
-        resetForm(AUTH_FORM.NAME)
-        this.setState({ loginMode: !this.state.loginMode })
-        changeTitle(!this.state.loginMode ? "Sign-in" : "Register")
-    }
-
     onSubmit = (values) => {
-        const { handleSignIn, handleSignUp } = this
-        this.state.loginMode ? handleSignIn(values) : handleSignUp(values)
-    }
-
-    handleSignIn = (values) => {
         const {login, onSignIn} = this.props
-        login(values)
         if(typeof onSignIn === 'function') {
-            onSignIn(values)
+            login(values, onSignIn)
+        } else {
+            login(values)
         }
-    }
-
-    handleSignUp = (values) => {
-        const { signUp, onSignUp } = this.props
-        const { changeMode } = this
-        signUp(values)
-        changeMode()
-        if(typeof onSignUp === 'function') {
-            onSignUp(values)
-        }
-
     }
 
     render() {
-        const { loginMode } = this.state
         const { handleSubmit, invalid, password } = this.props
-        const { onSubmit, changeMode } = this
+        const { onSubmit } = this
         return (
             <div className="content">
                 <div className="row center-xs">
@@ -72,17 +45,11 @@ export default class AuthForm extends Component {
                             <Card>
                                 <CardText>
                                     <Field name="username" label="Username" icon="account_box" validators={{required: true}} />
-                                    {!loginMode && (
-                                        <Field name="email" label="E-mail" type="email" icon="email" validators={{required: true, email: true}} />
-                                    )}
                                     <Field name="password" label="Password" type="password" icon="vpn_key" validators={{required: true, password: true}} />
-                                    {!loginMode && (
-                                        <Field name="confirmPassword" label="Confirm password" type="password" icon="check_circle" validators={{required: true, password: true, match: {name: "Password", value: password}}} />
-                                    )}
                                 </CardText>
                                 <CardActions>
-                                    <Button disabled={invalid} label={loginMode ? "Sign-in" : "Register"} type="submit" raised primary />
-                                    <Button label={loginMode ? "Register" : "Sign-in"} flat onClick={changeMode} />
+                                    <Button disabled={invalid} label="Sign-in" type="submit" raised primary />
+                                    <Button label="Register" flat href="#/register" />
                                 </CardActions>
                             </Card>
                         </form>

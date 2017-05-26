@@ -12,7 +12,7 @@ import MenuItem from 'react-toolbox/lib/menu/MenuItem'
 
 import NavMenuItem from '../widgets/nav-menu-item'
 
-import {logout} from '../auth/auth.actions'
+import {logout} from '../user/auth.actions'
 
 const mapStateToProps = state => ({user: state.auth.user})
 const mapDispatchToProps = dispatch => bindActionCreators({logout}, dispatch)
